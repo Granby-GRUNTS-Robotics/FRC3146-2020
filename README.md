@@ -2,10 +2,10 @@
 I should proboably confirm that this is working with github
 
 ### Priority List:
-A) Make Dwight Speak
+A ) Make Dwight Speak
 
-2) Programm?
+2 ) Programm?
 
-III)
+III )
 
-5) ????/ 
+5 ) ????/ 
