@@ -131,4 +131,10 @@ public class BallStorage extends SubsystemBase {
  * 
  * If you give a man a 3d printer, he'll eat for a day
  * If you teach a man to 3d print, he eats for life
+ * 
+ * If you give a man a match, he'll light one candle,
+ * but if you teach a man to make matches, he'll ban books.
+ * 
+ * If you let a man go to sleep, he'll feel pretty refreshed in the morning,
+ * but if you put a man to sleep, what morning? 
  */
