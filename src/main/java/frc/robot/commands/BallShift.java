@@ -7,13 +7,11 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.BallStorage;
 
 public class BallShift extends CommandBase {
   BallStorage m_BallStorage;
-  Timer timer= new Timer();
   /**
    * Creates a new BallShift.
    */
@@ -26,7 +24,6 @@ public class BallShift extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    timer.start();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -36,7 +33,7 @@ public class BallShift extends CommandBase {
       m_BallStorage.reset();
       m_BallStorage.moveSpace();
     }else  {
-      if(!m_BallStorage.timerT()) {m_BallStorage.bagMotorSetPosition(0.0);}
+      if(!m_BallStorage.isShifted()) {m_BallStorage.bagMotorSetPosition(0.0);}
     }
 
     m_BallStorage.countBall();

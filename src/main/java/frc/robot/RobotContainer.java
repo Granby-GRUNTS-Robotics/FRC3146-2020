@@ -11,8 +11,6 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.Button;
@@ -39,13 +37,11 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   public final Joystick bottomPortJoystick = new Joystick(ControlConstants.kXBOX_CONTROLLER_PORT );
   
-  //public final DriveTrain driveTrain = new DriveTrain();
+  public final DriveTrain driveTrain = new DriveTrain();
   
   public final Shooter j = new Shooter();
 
   //private final driveToLocation m_autoCommand = new driveToLocation(driveTrain, -24);
-
-  Shuffleboard john;
 
   Button intakeButton = new JoystickButton(bottomPortJoystick, 1);
 
@@ -66,12 +62,13 @@ public class RobotContainer {
   public RobotContainer() {
         //complicated way of setting the default command using a lambda function.
         //I will explain it if we have time, for now just remember the syntax
-        /*driveTrain.setDefaultCommand(
+        //basically this sets the drive train's defaul command to a normal user drive
+        driveTrain.setDefaultCommand(
           new RunCommand(() -> driveTrain.arcadeDrive(
                               -bottomPortJoystick.getRawAxis(Constants.ControlConstants.kJOYSTICK_Y), 
                               bottomPortJoystick.getRawAxis(Constants.ControlConstants.kJOYSTICK_TWIST)), 
                               driveTrain));
-                              */
+                              
                               
 
 
@@ -109,10 +106,7 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    // An ExampleCommand will run in autonomous
-    return new RunCommand(
-      () -> m_Intake.setIntakeMotorVelocity(0.0), m_Intake
-                            );
+    return new driveToLocation(driveTrain, 0.0);
   }
 }
 

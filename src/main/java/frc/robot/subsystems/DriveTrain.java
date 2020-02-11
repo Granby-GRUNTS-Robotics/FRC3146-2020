@@ -7,13 +7,12 @@
 
 package frc.robot.subsystems;
 
-import com.ctre.phoenix.motorcontrol.SensorCollection;
 import com.ctre.phoenix.sensors.PigeonIMU;
 import com.revrobotics.CANEncoder;
 import com.revrobotics.CANPIDController;
 import com.revrobotics.CANSparkMax;
-import com.revrobotics.ControlType;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import com.revrobotics.ControlType;
 
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -24,8 +23,10 @@ public class DriveTrain extends SubsystemBase {
   /**
    * Creates a new ExampleSubsystem.
    */
+  //our gyroscope
   public final PigeonIMU pigeonIMU= new PigeonIMU(SensorConstants.kPIDGEON_PORT);
 
+  //for when we are turning/using PID setpoints
   public double m_fwd;
   public double m_rot;
   
@@ -43,17 +44,19 @@ public class DriveTrain extends SubsystemBase {
 
   // Defines the encoders for each Drive neo
   
+  //new encoders for each Neo's, they need to be defined in the code or the motors won't run
   private final CANEncoder leftDriveEncoder = leftDriveMotor.getEncoder();
   private final CANEncoder leftSlaveEncoder = leftSlaveMotor.getEncoder();
   private final CANEncoder rightDriveEncoder = rightDriveMotor.getEncoder();
   private final CANEncoder rightSlaveEncoder = rightSlaveMotor.getEncoder();
 
+  //for trajectory generation and PID drive
   private final CANPIDController leftController = new CANPIDController(leftDriveMotor);
   private final CANPIDController righController = new CANPIDController(rightDriveMotor);
   
 
     
-//makes the encoders a group for pid
+  //makes the encoders a group for pid
 
   // Defines the speed controller groups, slaves leftSlaveMotor to leftDriveMotor
 
@@ -64,23 +67,29 @@ public class DriveTrain extends SubsystemBase {
   // Not Definite, going to be used
 
   public DriveTrain() {
+    //make slaves follow their masters
     leftSlaveMotor.follow(leftDriveMotor);
     rightSlaveMotor.follow(rightDriveMotor);
 
     leftDriveMotor.setInverted(true);
     leftSlaveMotor.setInverted(true);
+    rightDriveMotor.setInverted(false);
+    rightSlaveMotor.setInverted(false);
 
   }
+/* A BUNCH OF COMMANDS ARE DEFINED HERE FOR USE IN OTHER PARTS OF THE CODE*/
+
   //Defined here so that commands can use the same method
   public void arcadeDrive(double fwd, double rot){
     m_drive.arcadeDrive(fwd, rot);
   }
 
-  public double getLeftEncoder(){
+  //better method than calling it directly
+  public double getLeftEncoderPosition(){
     return leftDriveEncoder.getPosition();
   }
 
-  public double getRightEncoder(){
+  public double getRightEncoderPosition(){
     return rightDriveEncoder.getPosition();
   }
 
@@ -108,9 +117,10 @@ public class DriveTrain extends SubsystemBase {
     righController.setReference(right, ControlType.kVelocity);
   }
 
+
+  //CONSTANTLY CALLED. BE VERY CAREFUL WITH WHAT YOU PUT IN HERE
   @Override
   public void periodic() {
-    setPID(0.0, 0.0);
     // This method will be called once per scheduler run
     //Jane Gradle
   }

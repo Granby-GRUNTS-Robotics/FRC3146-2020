@@ -7,21 +7,16 @@
 
 package frc.robot.subsystems;
 
-import edu.wpi.first.wpilibj.Timer;
-
-import javax.swing.Spring;
-
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
-import com.ctre.phoenix.motorcontrol.can.VictorSPX;
+import com.revrobotics.Rev2mDistanceSensor;
+import com.revrobotics.Rev2mDistanceSensor.Port;
 
-import edu.wpi.first.wpilibj.Encoder;
-import edu.wpi.first.wpilibj.I2C;
+import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.IntakeConstants;
-import com.revrobotics.*;
-import com.revrobotics.Rev2mDistanceSensor.Port;
 
 public class BallStorage extends SubsystemBase {
 
@@ -67,8 +62,8 @@ public class BallStorage extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    System.out.println(getBallCount());
-    System.out.println(timer.get());
+    Shuffleboard.getTab("John").add("Ball Count", getBallCount());
+
     if(ballCheck.getRange()<100) {
       
       isCaptured="true";
@@ -105,13 +100,13 @@ public class BallStorage extends SubsystemBase {
   }
   public void moveSpace(){
     timer.start();
-    if(timerT()) {
+    if(isShifted()) {
       bagMotorSetPosition(0.5);
     }else {
       
     }
   }
-  public boolean timerT(){
+  public boolean isShifted(){
     return timer.get() < 0.5;
   }
 
