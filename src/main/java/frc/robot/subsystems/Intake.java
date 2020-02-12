@@ -21,8 +21,8 @@ public class Intake extends SubsystemBase {//this is literally all it is, sorry 
   
   VictorSPX topIntakeMotor = new VictorSPX(Constants.IntakeConstants.kTOP_INTAKE_MOTOR_PORT);
 
-  Solenoid leftArmSolenoid = new Solenoid(PneumaticConstants.kLEFT_INTAKE_PISTON_PORT);
-  Solenoid rightArmSolenoid = new Solenoid(PneumaticConstants.kRIGHT_INTAKE_PISTON_PORT);
+  //Solenoid leftArmSolenoid = new Solenoid(PneumaticConstants.kLEFT_INTAKE_PISTON_PORT);
+  //Solenoid rightArmSolenoid = new Solenoid(PneumaticConstants.kRIGHT_INTAKE_PISTON_PORT);
 
   /**
    * Creates a new Intake.

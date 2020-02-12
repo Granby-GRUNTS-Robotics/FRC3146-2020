@@ -52,8 +52,9 @@ public class DriveTrain extends SubsystemBase {
 
   //for trajectory generation and PID drive
   private final CANPIDController leftController = new CANPIDController(leftDriveMotor);
-  private final CANPIDController righController = new CANPIDController(rightDriveMotor);
+  private final CANPIDController rightController = new CANPIDController(rightDriveMotor);
   
+  //Add kinematics and odometry things
 
     
   //makes the encoders a group for pid
@@ -62,7 +63,7 @@ public class DriveTrain extends SubsystemBase {
 
   // differential drive because robotDrive is deprecated, no difference, simply
   // different term with a slightly different definition
-  private final DifferentialDrive m_drive = new DifferentialDrive(leftDriveMotor, rightDriveMotor);
+  //private final DifferentialDrive m_drive = new DifferentialDrive(leftDriveMotor, rightDriveMotor);
 
   // Not Definite, going to be used
 
@@ -76,12 +77,18 @@ public class DriveTrain extends SubsystemBase {
     rightDriveMotor.setInverted(false);
     rightSlaveMotor.setInverted(false);
 
+    leftController.setP(0.027);
+    leftDriveEncoder.setPosition(0.0);
+
+    rightController.setP(0.027);
+    rightDriveEncoder.setPosition(0.0);
+
   }
 /* A BUNCH OF COMMANDS ARE DEFINED HERE FOR USE IN OTHER PARTS OF THE CODE*/
 
   //Defined here so that commands can use the same method
   public void arcadeDrive(double fwd, double rot){
-    m_drive.arcadeDrive(fwd, rot);
+    //m_drive.arcadeDrive(fwd, rot);
   }
 
   //better method than calling it directly
@@ -104,6 +111,10 @@ public class DriveTrain extends SubsystemBase {
     return final_value;
   }
 
+  double rotToPID(double fwd, double rot){
+    return 0;
+  }
+
   public double getVelocityInRPM(double velocity_per_second){
     return velocity_per_second * 10.71;
   }
@@ -112,15 +123,16 @@ public class DriveTrain extends SubsystemBase {
     return -encoder_units*6*Math.PI/10.71; 
   }
 
-  public void setPID(double left, double right){
-    leftController.setReference(left, ControlType.kVelocity);
-    righController.setReference(right, ControlType.kVelocity);
+  public void setPID(double fwd, double rot){
+    leftController.setReference(getLeftEncoderPosition()+ fwd*30 , ControlType.kPosition);
+    rightController.setReference(getRightEncoderPosition()+ rot*30, ControlType.kPosition);
   }
 
 
   //CONSTANTLY CALLED. BE VERY CAREFUL WITH WHAT YOU PUT IN HERE
   @Override
   public void periodic() {
+    System.out.println(getLeftEncoderPosition());
     // This method will be called once per scheduler run
     //Jane Gradle
   }

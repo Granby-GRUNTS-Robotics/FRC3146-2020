@@ -107,8 +107,8 @@ public final class Constants {
     public static final class ControlConstants {
         public static final int kBUTTON_JOYSTICK_PORT = 0;
         public static final int kXBOX_CONTROLLER_PORT = 0;
-        public static final int kJOYSTICK_TWIST = 1;
-        public static final int kJOYSTICK_Y = 2;
+        public static final int kJOYSTICK_TWIST = 2;
+        public static final int kJOYSTICK_Y = 1;
     
         
     }

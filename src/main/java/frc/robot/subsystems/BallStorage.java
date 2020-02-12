@@ -49,6 +49,7 @@ public class BallStorage extends SubsystemBase {
 
   public BallStorage() {
     ballCheck.setAutomaticMode(true);
+    Shuffleboard.getTab("John").add("Ball Count", getBallCount());
   }
 
   public double obtainEncoderPosition() {
@@ -62,8 +63,7 @@ public class BallStorage extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    Shuffleboard.getTab("John").add("Ball Count", getBallCount());
-
+    
     if(ballCheck.getRange()<100) {
       
       isCaptured="true";

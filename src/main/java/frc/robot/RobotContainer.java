@@ -17,6 +17,7 @@ import edu.wpi.first.wpilibj2.command.button.Button;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.ControlConstants;
 import frc.robot.commands.BallShift;
+import frc.robot.commands.drive;
 import frc.robot.commands.driveToLocation;
 import frc.robot.subsystems.BallStorage;
 import frc.robot.subsystems.ColorSensor;
@@ -36,6 +37,7 @@ public class RobotContainer {
   
   // The robot's subsystems and commands are defined here...
   public final Joystick bottomPortJoystick = new Joystick(ControlConstants.kXBOX_CONTROLLER_PORT );
+  public final Joystick topPortJoystick = new Joystick(1 );
   
   public final DriveTrain driveTrain = new DriveTrain();
   
@@ -63,11 +65,11 @@ public class RobotContainer {
         //complicated way of setting the default command using a lambda function.
         //I will explain it if we have time, for now just remember the syntax
         //basically this sets the drive train's defaul command to a normal user drive
-        driveTrain.setDefaultCommand(
-          new RunCommand(() -> driveTrain.arcadeDrive(
+        driveTrain.setDefaultCommand(new RunCommand(() -> driveTrain.setPID(bottomPortJoystick.getRawAxis(Constants.ControlConstants.kJOYSTICK_Y), topPortJoystick.getRawAxis(Constants.ControlConstants.kJOYSTICK_Y) ), driveTrain));
+          /*new RunCommand(() -> driveTrain.arcadeDrive(
                               -bottomPortJoystick.getRawAxis(Constants.ControlConstants.kJOYSTICK_Y), 
                               bottomPortJoystick.getRawAxis(Constants.ControlConstants.kJOYSTICK_TWIST)), 
-                              driveTrain));
+                              driveTrain));*/
                               
                               
 
@@ -87,7 +89,7 @@ public class RobotContainer {
    * {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-      intakeButton.whenHeld(new BallShift(m_BallStorage)
+      /*intakeButton.whenHeld(new BallShift(m_BallStorage)
       ).whenInactive(new RunCommand(
         () -> m_BallStorage.bagMotorSetPosition(0.0)
                               )
@@ -95,7 +97,8 @@ public class RobotContainer {
 
       counterResetButton.whenHeld(new RunCommand(
         () -> m_BallStorage.resetBallCounter()
-      ));
+      ));*/
+      
 
     }
 
@@ -106,7 +109,7 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    return new driveToLocation(driveTrain, 0.0);
+    return new driveToLocation(driveTrain, 10);
   }
 }
 
