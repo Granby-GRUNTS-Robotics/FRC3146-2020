@@ -24,7 +24,7 @@ public class BallStorage extends SubsystemBase {
   // Encoder throughBoreEncoder = new
   // Encoder(IntakeConstants.kTHROUGH_BORE_PORT[0],
   // IntakeConstants.kTHROUGH_BORE_PORT[1]);
-  Rev2mDistanceSensor ballCheck = new Rev2mDistanceSensor(Port.kOnboard, Rev2mDistanceSensor.Unit.kMillimeters,
+  Rev2mDistanceSensor ballCheck = new Rev2mDistanceSensor(Port.kMXP, Rev2mDistanceSensor.Unit.kMillimeters,
       Rev2mDistanceSensor.RangeProfile.kDefault);
   private String isCaptured = "AAA";
   private String dwightMood = "ee";
@@ -48,7 +48,7 @@ public class BallStorage extends SubsystemBase {
   }
 
   public BallStorage() {
-    ballCheck.setAutomaticMode(true);
+    //ballCheck.setAutomaticMode(true);
     Shuffleboard.getTab("John").add("Ball Count", getBallCount());
   }
 
@@ -63,6 +63,8 @@ public class BallStorage extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    //System.out.println(ballCheck.getRange());
+
     
     if(ballCheck.getRange()<100) {
       

@@ -68,6 +68,8 @@ public class ColorSensor extends SubsystemBase {
       colorString = "Unknown";
     }
 
+    System.out.println(colorString);
+
     /**
      * Open Smart Dashboard or Shuffleboard to see the color detected by the 
      * sensor.

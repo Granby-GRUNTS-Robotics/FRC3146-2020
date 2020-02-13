@@ -32,7 +32,7 @@ public class Shooter extends PIDSubsystem {
    */
   public Shooter() {
     super(new PIDController(ShooterConstants.kP, ShooterConstants.kI, ShooterConstants.kD));
-    
+    bottomIntakeMotor.setInverted(true);
   }
 
   public double getInEncoderUnits(double Speed){
