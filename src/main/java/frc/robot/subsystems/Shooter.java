@@ -22,9 +22,9 @@ public class Shooter extends PIDSubsystem {
   
     
 
-  private final static CANSparkMax topIntakeMotor = new CANSparkMax(ShooterConstants.kTOP_SHOOTER_MOTOR_PORT,
+  private final static CANSparkMax topShooterMotor = new CANSparkMax(ShooterConstants.kTOP_SHOOTER_MOTOR_PORT,
       MotorType.kBrushless);
-  private final CANSparkMax bottomIntakeMotor = new CANSparkMax(ShooterConstants.kBOTTOM_SHOOTER_MOTOR_PORT,
+  private final CANSparkMax bottomShooterMotor = new CANSparkMax(ShooterConstants.kBOTTOM_SHOOTER_MOTOR_PORT,
       MotorType.kBrushless);
 
   /**
@@ -32,7 +32,7 @@ public class Shooter extends PIDSubsystem {
    */
   public Shooter() {
     super(new PIDController(ShooterConstants.kP, ShooterConstants.kI, ShooterConstants.kD));
-    bottomIntakeMotor.setInverted(true);
+    bottomShooterMotor.setInverted(true);
   }
 
   public double getInEncoderUnits(double Speed){
@@ -42,7 +42,7 @@ public class Shooter extends PIDSubsystem {
   
 
 
-  //We should create a method(?) Idk why.
+  //We should create a method(?) Idk why. Maybe we want to.
 
   @Override
   public void periodic() {
@@ -53,7 +53,8 @@ public class Shooter extends PIDSubsystem {
   @Override
   protected void useOutput(double output, double setpoint) {
     // TODO Auto-generated method stub
-
+    topShooterMotor.set(output);
+    bottomShooterMotor.set(output);
   }
 
   @Override
