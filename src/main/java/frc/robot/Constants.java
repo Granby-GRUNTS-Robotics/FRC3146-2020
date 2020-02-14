@@ -41,8 +41,8 @@ public final class Constants {
      * ShooterConstants
      */
     public static final class ShooterConstants {
-        public static final int kTOP_SHOOTER_MOTOR_PORT = 0;
-        public static final int kBOTTOM_SHOOTER_MOTOR_PORT = 0;
+        public static final int kTOP_SHOOTER_MOTOR_PORT = 8;
+        public static final int kBOTTOM_SHOOTER_MOTOR_PORT = 9;
         public static final double kSHOOTER_NORMAL_SPEED = 0;
         
 

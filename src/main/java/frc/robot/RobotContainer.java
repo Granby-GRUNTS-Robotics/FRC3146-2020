@@ -19,6 +19,7 @@ import frc.robot.Constants.ControlConstants;
 import frc.robot.commands.BallShift;
 import frc.robot.commands.drive;
 import frc.robot.commands.driveToLocation;
+import frc.robot.commands.ex;
 import frc.robot.subsystems.BallStorage;
 import frc.robot.subsystems.ColorSensor;
 import frc.robot.subsystems.DriveTrain;
@@ -37,13 +38,14 @@ public class RobotContainer {
   
   // The robot's subsystems and commands are defined here...
   public final Joystick bottomPortJoystick = new Joystick(ControlConstants.kXBOX_CONTROLLER_PORT );
+  
   public final Joystick topPortJoystick = new Joystick(1 );
   
   public final DriveTrain driveTrain = new DriveTrain();
   
   public final Shooter j = new Shooter();
 
-  //private final driveToLocation m_autoCommand = new driveToLocation(driveTrain, -24);
+  private final driveToLocation m_autoCommand = new driveToLocation(driveTrain, -24);
 
   Button intakeButton = new JoystickButton(bottomPortJoystick, 1);
 
@@ -51,7 +53,7 @@ public class RobotContainer {
 
   private final ColorSensor m_ColorSensor = new ColorSensor();
 
-  private Intake m_Intake = new Intake();
+  //private Intake m_Intake = new Intake();
 
   //private final BallStorage m_BallStorage = new BallStorage();
   
@@ -109,7 +111,7 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    return new driveToLocation(driveTrain, 10);
+    return new ex();
   }
 }
 
