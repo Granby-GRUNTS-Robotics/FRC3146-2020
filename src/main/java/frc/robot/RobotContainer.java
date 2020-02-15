@@ -37,25 +37,32 @@ public class RobotContainer {
   DriverStation mDriverStation;
   
   // The robot's subsystems and commands are defined here...
-  public final Joystick bottomPortJoystick = new Joystick(ControlConstants.kXBOX_CONTROLLER_PORT );
-  
-  public final Joystick topPortJoystick = new Joystick(1 );
   
   public final DriveTrain driveTrain = new DriveTrain();
   
-  public final Shooter j = new Shooter();
+  public final Shooter shooter = new Shooter();
+
+  private final Intake m_Intake = new Intake();
+
+  private final BallStorage m_BallStorage = new BallStorage();
+
+  private final ColorSensor m_ColorSensor = new ColorSensor();
 
   private final driveToLocation m_autoCommand = new driveToLocation(driveTrain, -24);
+
+  public final Joystick bottomPortJoystick = new Joystick(ControlConstants.kXBOX_CONTROLLER_PORT );
+  
+  public final Joystick topPortJoystick = new Joystick(1);
 
   Button intakeButton = new JoystickButton(bottomPortJoystick, 1);
 
   Button counterResetButton = new JoystickButton(bottomPortJoystick, 2);
 
-  private final ColorSensor m_ColorSensor = new ColorSensor();
+  
 
-  //private Intake m_Intake = new Intake();
+  
 
-  //private final BallStorage m_BallStorage = new BallStorage();
+  
   
   
 
