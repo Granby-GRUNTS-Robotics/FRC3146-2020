@@ -14,6 +14,7 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.ControlType;
 
+import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.DriveTrainConstants;
 import frc.robot.Constants.SensorConstants;
@@ -86,9 +87,9 @@ public class DriveTrain extends SubsystemBase {
 /* A BUNCH OF COMMANDS ARE DEFINED HERE FOR USE IN OTHER PARTS OF THE CODE*/
 
   //Defined here so that commands can use the same method
-  public void arcadeDrive(double fwd, double rot){
-    //m_drive.arcadeDrive(fwd, rot);
-  }
+  /*public void arcadeDrive(double fwd, double rot){
+    m_drive.arcadeDrive(fwd, rot);
+  }*/
 
   //better method than calling it directly
   public double getLeftEncoderPosition(){
@@ -104,25 +105,26 @@ public class DriveTrain extends SubsystemBase {
     return initial;
   }
 
-  //TODO
+  
   public double getInEncoderDistance(double distance){
-    double final_value = -(distance-0.5)/6/Math.PI*10.71;
+    double final_value = -(distance)/6/Math.PI*10.71;
     return final_value;
-  }
-
-  double rotToPID(double fwd, double rot){
-    return 0;
-  }
-
-  public double getVelocityInRPM(double velocity_per_second){
-    return velocity_per_second * 10.71;
   }
 
   public double getInInches(double encoder_units){
     return -encoder_units*6*Math.PI/10.71; 
   }
 
-  public void setPID(double fwd, double rot){
+  //TODO
+  /*double rotToPID(double fwd, double rot){
+    return 0;
+  }*/
+
+  public double getVelocityInRPM(double velocity_per_second){
+    return velocity_per_second * 10.71;
+  }
+
+  public void setReference(double fwd, double rot){
     leftController.setReference(getLeftEncoderPosition()+ fwd*30 , ControlType.kPosition);
     rightController.setReference(getRightEncoderPosition()+ rot*30, ControlType.kPosition);
   }

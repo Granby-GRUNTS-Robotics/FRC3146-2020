@@ -46,7 +46,7 @@ public class drive extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_DriveTrain.setPID(m_speed, m_turn);
+    m_DriveTrain.setReference(m_speed, m_turn);
     //System.out.println("JJ");
 
   }
