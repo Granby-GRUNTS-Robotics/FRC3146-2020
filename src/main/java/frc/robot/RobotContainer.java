@@ -40,19 +40,19 @@ public class RobotContainer {
   
   public final DriveTrain driveTrain = new DriveTrain();
   
-  public final Shooter shooter = new Shooter();
+  //public final Shooter shooter = new Shooter();
 
-  private final Intake m_Intake = new Intake();
+  private final Intake intake = new Intake();
 
-  private final BallStorage m_BallStorage = new BallStorage();
+  private final BallStorage ballStorage = new BallStorage();
 
-  private final ColorSensor m_ColorSensor = new ColorSensor();
+  //private final ColorSensor colorSensor = new ColorSensor();
 
   private final driveToLocation m_autoCommand = new driveToLocation(driveTrain, -24);
 
-  public final Joystick bottomPortJoystick = new Joystick(ControlConstants.kXBOX_CONTROLLER_PORT );
+  public final Joystick bottomPortJoystick = new Joystick(ControlConstants.kDRIVE_CONTROLLER_PORT);
   
-  public final Joystick topPortJoystick = new Joystick(1);
+  public final Joystick topPortJoystick = new Joystick(ControlConstants.kTANK_DRIVE_CONTROLLER_PORT);
 
   Button intakeButton = new JoystickButton(bottomPortJoystick, 1);
 
@@ -74,7 +74,7 @@ public class RobotContainer {
         //complicated way of setting the default command using a lambda function.
         //I will explain it if we have time, for now just remember the syntax
         //basically this sets the drive train's defaul command to a normal user drive
-        driveTrain.setDefaultCommand(new RunCommand(() -> driveTrain.setPID(bottomPortJoystick.getRawAxis(Constants.ControlConstants.kJOYSTICK_Y), topPortJoystick.getRawAxis(Constants.ControlConstants.kJOYSTICK_Y) ), driveTrain));
+        driveTrain.setDefaultCommand(new RunCommand(() -> driveTrain.setReference(bottomPortJoystick.getRawAxis(Constants.ControlConstants.kJOYSTICK_Y)*30, 30*topPortJoystick.getRawAxis(Constants.ControlConstants.kJOYSTICK_Y) ), driveTrain));
           /*new RunCommand(() -> driveTrain.arcadeDrive(
                               -bottomPortJoystick.getRawAxis(Constants.ControlConstants.kJOYSTICK_Y), 
                               bottomPortJoystick.getRawAxis(Constants.ControlConstants.kJOYSTICK_TWIST)), 
@@ -98,15 +98,11 @@ public class RobotContainer {
    * {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-      /*intakeButton.whenHeld(new BallShift(m_BallStorage)
-      ).whenInactive(new RunCommand(
-        () -> m_BallStorage.bagMotorSetPosition(0.0)
-                              )
-      );
+      intakeButton.whenHeld(new RunCommand(()->intake.setIntakeMotorVelocity(0.5), intake))
+                  .whenInactive(new RunCommand(()->intake.setIntakeMotorVelocity(0.0), intake));
 
-      counterResetButton.whenHeld(new RunCommand(
-        () -> m_BallStorage.resetBallCounter()
-      ));*/
+      counterResetButton.whenHeld(new RunCommand(() -> ballStorage.runMotor(0.5), ballStorage))
+                        .whenInactive(new RunCommand(() -> ballStorage.runMotor(0.0), ballStorage));
       
 
     }
@@ -118,7 +114,7 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    return new ex();
+    return m_autoCommand;
   }
 }
 

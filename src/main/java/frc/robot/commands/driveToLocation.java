@@ -12,7 +12,7 @@ import frc.robot.Constants.DriveTrainConstants;
 import frc.robot.subsystems.DriveTrain;
 
 public class driveToLocation extends CommandBase {
-  private DriveTrain m_DriveTrain;
+  private DriveTrain m_driveTrain;
   private double m_distance;
   private double initial_position;
   
@@ -22,10 +22,8 @@ public class driveToLocation extends CommandBase {
 
 
   public driveToLocation(DriveTrain driveTrain, double distance) {
-    m_DriveTrain = driveTrain;
-    initial_position = m_DriveTrain.getPosition();
-    
-    m_distance = initial_position + m_DriveTrain.getInEncoderDistance(distance);
+    m_driveTrain = driveTrain;    
+    m_distance = m_driveTrain.getInEncoderDistance(distance);
 
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(driveTrain);
@@ -34,7 +32,7 @@ public class driveToLocation extends CommandBase {
 
   //check to make sure we are at target
   private boolean isAtTarget(){
-    if(Math.abs(m_DriveTrain.getPosition() - m_distance) < DriveTrainConstants.kSPECIFICITY){
+    if(Math.abs(m_driveTrain.getPosition() - m_distance) < DriveTrainConstants.kSPECIFICITY){
       return true;
     } else return false;
   }
@@ -42,20 +40,12 @@ public class driveToLocation extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    
+    m_driveTrain.setReference(m_distance, m_distance);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if (m_distance < m_DriveTrain.getPosition()){
-      m_DriveTrain.arcadeDrive(0, -0.35);
-    }else if (m_distance > m_DriveTrain.getPosition()
-    ){
-      m_DriveTrain.arcadeDrive(0, 0.35);
-    }
-    String john = m_DriveTrain.getInInches(m_DriveTrain.getPosition()) + " , " + m_distance + " , " + initial_position;
-    System.out.println(john);
   }
 
   // Called once the command ends or is interrupted.

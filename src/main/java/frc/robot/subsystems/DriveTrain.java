@@ -124,16 +124,15 @@ public class DriveTrain extends SubsystemBase {
     return velocity_per_second * 10.71;
   }
 
-  public void setReference(double fwd, double rot){
-    leftController.setReference(getLeftEncoderPosition()+ fwd*30 , ControlType.kPosition);
-    rightController.setReference(getRightEncoderPosition()+ rot*30, ControlType.kPosition);
+  public void setReference(double left, double right){
+    leftController.setReference(getLeftEncoderPosition()+ left , ControlType.kPosition);
+    rightController.setReference(getRightEncoderPosition()+ right, ControlType.kPosition);
   }
 
 
   //CONSTANTLY CALLED. BE VERY CAREFUL WITH WHAT YOU PUT IN HERE
   @Override
   public void periodic() {
-    System.out.println(getLeftEncoderPosition());
     // This method will be called once per scheduler run
     //Jane Gradle
   }
