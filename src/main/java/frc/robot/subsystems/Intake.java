@@ -19,7 +19,7 @@ import frc.robot.Constants.PneumaticConstants;
 public class Intake extends SubsystemBase {//this is literally all it is, sorry for the bare-bones
 
   
-  VictorSPX topIntakeMotor = new VictorSPX(Constants.IntakeConstants.kTOP_INTAKE_MOTOR_PORT);
+  VictorSPX intakeMotor = new VictorSPX(Constants.IntakeConstants.kINTAKE_MOTOR_PORT);
 
   //Solenoid leftArmSolenoid = new Solenoid(PneumaticConstants.kLEFT_INTAKE_PISTON_PORT);
   //Solenoid rightArmSolenoid = new Solenoid(PneumaticConstants.kRIGHT_INTAKE_PISTON_PORT);
@@ -35,7 +35,9 @@ public class Intake extends SubsystemBase {//this is literally all it is, sorry 
   public void periodic() {    
     // This method will be called once per scheduler run
   }
-  public void setIntakeMotorVelocity(double speed){
-    topIntakeMotor.set(ControlMode.Velocity, speed);
+  
+  public void setIntakeMotorVelocity(double percent){
+    intakeMotor.set(ControlMode.PercentOutput, percent);
+    if (percent>0) System.out.println("intake");
   }
 }

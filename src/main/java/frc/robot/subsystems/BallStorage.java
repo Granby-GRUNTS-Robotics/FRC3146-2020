@@ -49,7 +49,7 @@ public class BallStorage extends SubsystemBase {
 
   public BallStorage() {
     //ballCheck.setAutomaticMode(true);
-    Shuffleboard.getTab("John").add("Ball Count", getBallCount());
+    //Shuffleboard.getTab("John").add("Ball Count", getBallCount());
   }
 
   public double obtainEncoderPosition() {
@@ -110,6 +110,11 @@ public class BallStorage extends SubsystemBase {
   }
   public boolean isShifted(){
     return timer.get() < 0.5;
+  }
+
+  public void runMotor(double percent){
+    bagController.set(ControlMode.PercentOutput, percent);
+    if (percent>0) System.out.println("ball");
   }
 
   public void resetBallCounter(){

@@ -57,8 +57,7 @@ public final class Constants {
      * IntakeConstants
      */
     public static final class IntakeConstants {
-        public static final int kTOP_INTAKE_MOTOR_PORT = 0;
-        public static final int kBOTTOM_INTAKE_MOTOR_PORT = 0;
+        public static final int kINTAKE_MOTOR_PORT = 6;
         public static final double kINTAKE_NORMAL_SPEED = 0;
         public static final int kBAG_CONTROLLER_PORT = 7;
         public static final int[] kTHROUGH_BORE_PORT = {0,0};
@@ -95,8 +94,6 @@ public final class Constants {
         public static final int kBALL_COUNTER_PORT = 0;
         public static final int kCOLOR_SENSOR_PORT = 0;
         public static final int kPIDGEON_PORT = 5;
-
-        
     }
 
 
@@ -106,7 +103,8 @@ public final class Constants {
      */
     public static final class ControlConstants {
         public static final int kBUTTON_JOYSTICK_PORT = 0;
-        public static final int kXBOX_CONTROLLER_PORT = 0;
+        public static final int kDRIVE_CONTROLLER_PORT = 0;
+        public static final int kTANK_DRIVE_CONTROLLER_PORT = 1;
         public static final int kJOYSTICK_TWIST = 2;
         public static final int kJOYSTICK_Y = 1;
     
