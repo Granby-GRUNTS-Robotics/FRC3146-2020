@@ -10,30 +10,35 @@ package frc.robot.subsystems;
 import com.revrobotics.CANEncoder;
 import com.revrobotics.CANPIDController;
 import com.revrobotics.CANSparkMax;
-import com.revrobotics.ControlType;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import com.revrobotics.ControlType;
 
-import edu.wpi.first.wpilibj.controller.PIDController;
-import edu.wpi.first.wpilibj2.command.PIDSubsystem;
+import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.wpilibj.Solenoid;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ShooterConstants;
+import static frc.robot.Constants.PneumaticConstants;
+import static frc.robot.Constants.PneumaticConstants.kON;
+import static frc.robot.Constants.PneumaticConstants.kOFF;
 
 public class Shooter extends SubsystemBase {
   /**
-   *I defined the Sparkmax's here so that only the subsystem can use them. I didn't group them together because we might want 
-   *to have them running at different speeds
+   * I defined the Sparkmax's here so that only the subsystem can use them. I
+   * didn't group them together because we might want to have them running at
+   * different speeds
    */
-  
-    
 
-  private final static CANSparkMax leftShooterMotor = new CANSparkMax(ShooterConstants.kTOP_SHOOTER_MOTOR_PORT,
+  private static final Solenoid ballStop = new Solenoid(PneumaticConstants.kPCM_Port, PneumaticConstants.kSHOOTER_STOP_PORT);
+
+  private final static CANSparkMax leftShooterMotor = new CANSparkMax(ShooterConstants.kLEFT_SHOOTER_MOTOR_PORT,
       MotorType.kBrushless);
-  private final static CANSparkMax rightShooterMotor = new CANSparkMax(ShooterConstants.kBOTTOM_SHOOTER_MOTOR_PORT,
+  private final static CANSparkMax rightShooterMotor = new CANSparkMax(ShooterConstants.kRIGHT_SHOOTER_MOTOR_PORT,
       MotorType.kBrushless);
 
   private final static CANEncoder leftEncoder = new CANEncoder(leftShooterMotor);
   private final static CANEncoder rightEncoder = new CANEncoder(rightShooterMotor);
-
 
   private static final CANPIDController shooterController = new CANPIDController(leftShooterMotor);
 
@@ -41,10 +46,18 @@ public class Shooter extends SubsystemBase {
    * Creates a new Shooter.
    */
   public Shooter() {
-    rightShooterMotor.setInverted(true);
-    rightShooterMotor.follow(leftShooterMotor);
+    rightShooterMotor.setInverted(false);
+    leftShooterMotor.setInverted(false);
+    rightShooterMotor.follow(leftShooterMotor, true);    
   }
 
+  public void stopBall(){
+    ballStop.set(kON);
+  }
+
+  public void letBall(){
+    ballStop.set(kOFF);
+  }
 //TODO
   public double getInEncoderUnits(double Speed){
     double encoder_speed = Speed/1.25;
@@ -57,7 +70,11 @@ public class Shooter extends SubsystemBase {
   }
 
   public void setSetpoint(double setpoint){
-    shooterController.setReference(setpoint, ControlType.kVelocity);
+    shooterController.setReference(setpoint, ControlType.kVelocity, 0);
+  }
+
+  public double getSpeed(){
+    return leftEncoder.getVelocity();
   }
   
 
@@ -66,7 +83,6 @@ public class Shooter extends SubsystemBase {
 
   @Override
   public void periodic() {
-    // This method will be called once per scheduler run
   }
 
 }
