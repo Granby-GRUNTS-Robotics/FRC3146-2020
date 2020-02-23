@@ -14,15 +14,17 @@ import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
-import frc.robot.Constants.PneumaticConstants;
+import static frc.robot.Constants.PneumaticConstants;
+import static frc.robot.Constants.PneumaticConstants.kON;
+import static frc.robot.Constants.PneumaticConstants.kOFF;
 
-public class Intake extends SubsystemBase {//this is literally all it is, sorry for the bare-bones
+public class Intake extends SubsystemBase {
 
   
   VictorSPX intakeMotor = new VictorSPX(Constants.IntakeConstants.kINTAKE_MOTOR_PORT);
 
-  //Solenoid leftArmSolenoid = new Solenoid(PneumaticConstants.kLEFT_INTAKE_PISTON_PORT);
-  //Solenoid rightArmSolenoid = new Solenoid(PneumaticConstants.kRIGHT_INTAKE_PISTON_PORT);
+  Solenoid backArmSolenoid = new Solenoid(PneumaticConstants.kPCM_Port, PneumaticConstants.kBACK_INTAKE_PORT);
+  Solenoid frontArmSolenoid = new Solenoid(PneumaticConstants.kPCM_Port, PneumaticConstants.kFRONT_INTAKE_PORT);
 
   /**
    * Creates a new Intake.
@@ -38,6 +40,15 @@ public class Intake extends SubsystemBase {//this is literally all it is, sorry 
   
   public void setIntakeMotorVelocity(double percent){
     intakeMotor.set(ControlMode.PercentOutput, percent);
-    if (percent>0) System.out.println("intake");
+  }
+
+  public void up(){
+    backArmSolenoid.set(kOFF);
+    frontArmSolenoid.set(kON);
+  }
+
+  public void down(){
+    backArmSolenoid.set(kON);
+    frontArmSolenoid.set(kOFF);
   }
 }

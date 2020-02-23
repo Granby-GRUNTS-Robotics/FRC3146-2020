@@ -7,24 +7,27 @@
 
 package frc.robot;
 
+import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.Button;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.ControlConstants;
-import frc.robot.commands.BallShift;
-import frc.robot.commands.drive;
-import frc.robot.commands.driveToLocation;
-import frc.robot.commands.ex;
+import frc.robot.commands.intake.BallShift;
+import frc.robot.commands.drive.drive;
+import frc.robot.commands.drive.driveToLocation;
 import frc.robot.subsystems.BallStorage;
 import frc.robot.subsystems.ColorSensor;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.ShooterLift;
 
 /**
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -40,7 +43,11 @@ public class RobotContainer {
   
   public final DriveTrain driveTrain = new DriveTrain();
   
-  //public final Shooter shooter = new Shooter();
+  public final Shooter shooter = new Shooter();
+
+  private final ShooterLift shooterLift = new ShooterLift();
+  
+
 
   private final Intake intake = new Intake();
 
@@ -48,17 +55,19 @@ public class RobotContainer {
 
   //private final ColorSensor colorSensor = new ColorSensor();
 
-  private final driveToLocation m_autoCommand = new driveToLocation(driveTrain, -24);
+  private final driveToLocation m_autoCommand = new driveToLocation(driveTrain, 0);
 
   public final Joystick bottomPortJoystick = new Joystick(ControlConstants.kDRIVE_CONTROLLER_PORT);
   
   public final Joystick topPortJoystick = new Joystick(ControlConstants.kTANK_DRIVE_CONTROLLER_PORT);
 
-  Button intakeButton = new JoystickButton(bottomPortJoystick, 1);
+  private final Button intakeButton = new JoystickButton(bottomPortJoystick, 1);
 
-  Button counterResetButton = new JoystickButton(bottomPortJoystick, 2);
+  private final Button counterResetButton = new JoystickButton(bottomPortJoystick, 2);
 
-  
+  //*/
+
+  private ShuffleboardTab shooterTab = Shuffleboard.getTab("Shooter");
 
   
 
@@ -71,23 +80,15 @@ public class RobotContainer {
    * The container for the robot.  Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() {
-        //complicated way of setting the default command using a lambda function.
-        //I will explain it if we have time, for now just remember the syntax
-        //basically this sets the drive train's defaul command to a normal user drive
-        driveTrain.setDefaultCommand(new RunCommand(() -> driveTrain.setReference(bottomPortJoystick.getRawAxis(Constants.ControlConstants.kJOYSTICK_Y)*30, 30*topPortJoystick.getRawAxis(Constants.ControlConstants.kJOYSTICK_Y) ), driveTrain));
-          /*new RunCommand(() -> driveTrain.arcadeDrive(
-                              -bottomPortJoystick.getRawAxis(Constants.ControlConstants.kJOYSTICK_Y), 
-                              bottomPortJoystick.getRawAxis(Constants.ControlConstants.kJOYSTICK_TWIST)), 
-                              driveTrain));*/
-                              
-                              
+    shooterTab.add("Set Zero", new RunCommand(()->shooter.setSetpoint(0), shooter));
+    shooterTab.add("Set One", new RunCommand(()->shooter.setSetpoint(5000), shooter));
+    shooterTab.add("move bag", new RunCommand(()->ballStorage.addBallCounter(), ballStorage));
+    shooterTab.add("move piston F", new RunCommand(()->shooterLift.setPosition(0), shooterLift));
+    
 
-
-        
-
+    driveTrain.setDefaultCommand(new drive(driveTrain, bottomPortJoystick.getRawAxis(ControlConstants.kJOYSTICK_Y), bottomPortJoystick.getRawAxis(ControlConstants.kJOYSTICK_TWIST)));
+    ballStorage.setDefaultCommand(new BallShift(ballStorage));
     // Configure the button bindings*/
-
-
     configureButtonBindings();
   }
 
@@ -98,13 +99,15 @@ public class RobotContainer {
    * {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-      intakeButton.whenHeld(new RunCommand(()->intake.setIntakeMotorVelocity(0.5), intake))
-                  .whenInactive(new RunCommand(()->intake.setIntakeMotorVelocity(0.0), intake));
+      /*intakeButton.whenHeld(new RunCommand(()->intake.setIntakeMotorVelocity(0.75), intake))
+      .whenInactive(new RunCommand(()->intake.setIntakeMotorVelocity(0.0), intake));
 
-      counterResetButton.whenHeld(new RunCommand(() -> ballStorage.runMotor(0.5), ballStorage))
-                        .whenInactive(new RunCommand(() -> ballStorage.runMotor(0.0), ballStorage));
+      intakeButton.whenHeld(new RunCommand(() -> ballStorage.runMotor(0.75), ballStorage))
+      .whenInactive(new RunCommand(() -> ballStorage.runMotor(0.0), ballStorage));
       
-
+      counterResetButton.whenHeld(new RunCommand(()->shooter.setSetpoint(-2000), shooter))
+      .whenInactive(new RunCommand(()->shooter.setSetpoint(0.0), shooter));
+      //*/
     }
 
 

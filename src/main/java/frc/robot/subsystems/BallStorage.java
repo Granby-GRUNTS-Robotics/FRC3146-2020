@@ -8,13 +8,12 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.revrobotics.Rev2mDistanceSensor;
 import com.revrobotics.Rev2mDistanceSensor.Port;
 
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.IntakeConstants;
 
@@ -24,7 +23,7 @@ public class BallStorage extends SubsystemBase {
   // Encoder throughBoreEncoder = new
   // Encoder(IntakeConstants.kTHROUGH_BORE_PORT[0],
   // IntakeConstants.kTHROUGH_BORE_PORT[1]);
-  Rev2mDistanceSensor ballCheck = new Rev2mDistanceSensor(Port.kMXP, Rev2mDistanceSensor.Unit.kMillimeters,
+  Rev2mDistanceSensor ballCheck = new Rev2mDistanceSensor(Port.kOnboard, Rev2mDistanceSensor.Unit.kMillimeters,
       Rev2mDistanceSensor.RangeProfile.kDefault);
   private String isCaptured = "AAA";
   private String dwightMood = "ee";
@@ -40,7 +39,7 @@ public class BallStorage extends SubsystemBase {
 
    
   private double getDistanceSensor(){
-    return ballCheck.getRange()-30;
+    return ballCheck.getRange();
   }
 
   public boolean hasBall(){
@@ -48,39 +47,26 @@ public class BallStorage extends SubsystemBase {
   }
 
   public BallStorage() {
-    //ballCheck.setAutomaticMode(true);
+    ballCheck.setAutomaticMode(true);
+    bagController.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder );
+    bagController.configFactoryDefault();
+    bagController.config_kP(0, 0.15);
     //Shuffleboard.getTab("John").add("Ball Count", getBallCount());
   }
 
   public double obtainEncoderPosition() {
     return 0.0; //throughBoreEncoder.get();
   }
-
   public void bagMotorSetPosition(double position) {
-    bagController.set(ControlMode.PercentOutput, position);
+    bagController.set(ControlMode.Position, position*4096);
   }
 
   @Override
   public void periodic() {
+    moveSpace();
+    System.out.println(ballCount);
     // This method will be called once per scheduler run
-    //System.out.println(ballCheck.getRange());
-
-    
-    if(ballCheck.getRange()<100) {
-      
-      isCaptured="true";
-      dwightMood="true";
-      
-    }
-    else {
-      isCaptured="false";
-      dwightMood="false";
-    }
-    SmartDashboard.putString("Is Captured", isCaptured);
-    SmartDashboard.putString("Dwight mood: ", dwightMood);
-
-    
-  }
+ }
 
   //once it gets a ball, increase the counter. Once the ball is gone, start reading again
   public void countBall() {
@@ -100,16 +86,13 @@ public class BallStorage extends SubsystemBase {
   public void reset(){
     timer.reset();
   }
+
   public void moveSpace(){
-    timer.start();
-    if(isShifted()) {
-      bagMotorSetPosition(0.5);
-    }else {
-      
-    }
+    bagMotorSetPosition(3*ballCount);
   }
+
   public boolean isShifted(){
-    return timer.get() < 0.5;
+    return Math.abs(bagController.getErrorDerivative())<1000;
   }
 
   public void runMotor(double percent){
@@ -119,6 +102,9 @@ public class BallStorage extends SubsystemBase {
 
   public void resetBallCounter(){
     ballCount = 0;
+  }
+  public void addBallCounter(){
+    ballCount += 1;
   }
 }
 

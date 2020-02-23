@@ -41,8 +41,8 @@ public final class Constants {
      * ShooterConstants
      */
     public static final class ShooterConstants {
-        public static final int kTOP_SHOOTER_MOTOR_PORT = 8;
-        public static final int kBOTTOM_SHOOTER_MOTOR_PORT = 9;
+        public static final int kLEFT_SHOOTER_MOTOR_PORT = 11;
+        public static final int kRIGHT_SHOOTER_MOTOR_PORT = 10;
         public static final double kSHOOTER_NORMAL_SPEED = 0;
         
 
@@ -61,7 +61,7 @@ public final class Constants {
         public static final double kINTAKE_NORMAL_SPEED = 0;
         public static final int kBAG_CONTROLLER_PORT = 7;
         public static final int[] kTHROUGH_BORE_PORT = {0,0};
-        public static final int kBALL_DISTANCE_SETPOINT = 130;
+        public static final int kBALL_DISTANCE_SETPOINT = 160;
     }
 
     /**
@@ -69,22 +69,22 @@ public final class Constants {
      * they have long names but that's fine for now
      */
     public static final class PneumaticConstants {
-        public static final int kLEFT_INTAKE_PISTON_PORT = 0;
-        public static final int kRIGHT_INTAKE_PISTON_PORT = 0;
+        public static final int kPCM_Port = 14;
 
-        public static final int kCLIMB_PORT_ONE = 0;
-        public static final int kCLIMB_PORT_TWO = 0;
+        public static final int kFRONT_INTAKE_PORT = 0;
+        public static final int kBACK_INTAKE_PORT = 0;
 
-        public static final int kLOW_LEFT_LIFT_PORT = 0;
-        public static final int kLOW_RIGHT_LIFT_PORT = 0;
-        public static final int kTOP_LEFT_LIFT_PORT = 0;
-        public static final int kTOP_RIGHT_LIFT_PORT = 0;
+        public static final int kFIRST_CLIMB_PORT = 0;
+        public static final int kSECOND_CLIMB_PORT = 0;
 
-        public static final boolean kSHOOTER_UP = false;
+        public static final int kSHOOTER_STOP_PORT = 0;
 
-        //for whichever state up or down might be
-        public static final boolean kINTAKE_DOWN = false;
-        public static final boolean kINTAKE_UP = false;
+        public static final int kTOP_SHOOTER_LIFT_PORT = 0;
+        public static final int kBOTTOM_SHOOTER_LIFT_PORT = 0;
+
+        public static final boolean kON = true;
+        public static final boolean kOFF = false;
+
     }
 
     /**
@@ -94,6 +94,7 @@ public final class Constants {
         public static final int kBALL_COUNTER_PORT = 0;
         public static final int kCOLOR_SENSOR_PORT = 0;
         public static final int kPIDGEON_PORT = 5;
+
     }
 
 
@@ -109,6 +110,10 @@ public final class Constants {
         public static final int kJOYSTICK_Y = 1;
     
         
+    }
+
+    public static final class LiftConstants {
+        public static final int[] kLIFT_MOTOR_PORTS = {8,9};
     }
 
 
