@@ -1,54 +1,42 @@
 /*----------------------------------------------------------------------------*/
-/* Copyright (c) 2018-2019 FIRST. All Rights Reserved.                        */
+/* Copyright (c) 2019 FIRST. All Rights Reserved.                             */
 /* Open Source Software - may be modified and shared by FRC teams. The code   */
 /* must be accompanied by the FIRST BSD license file in the root directory of */
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands;
-
-import frc.robot.subsystems.DriveTrain;
+package frc.robot.commands.intake;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.subsystems.BallStorage;
 
-
-/**
- * An example command that uses an example subsystem.
- */
-public class drive extends CommandBase {
-  @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
-  
-  //to give this subsysem access to its passed methods
-  private final DriveTrain m_DriveTrain;
-  private Double m_speed;
-  private Double m_turn;
-
+public class BallShift extends CommandBase {
+  BallStorage m_BallStorage;
   /**
-   * Creates a new ExampleCommand.
-   *
-   * @param subsystem The subsystem used by this command.
+   * Creates a new BallShift.
    */
-  public drive(DriveTrain subsystem, Double spd, Double turn) {
-    m_DriveTrain = subsystem;
+  public BallShift(BallStorage ballStorage) {
+    m_BallStorage = ballStorage;
+    addRequirements(ballStorage);
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(subsystem);
-    m_speed = spd;
-    m_turn = turn;
   }
-
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_DriveTrain.setReference(m_speed*30, m_turn*30);
-    //System.out.println("JJ");
+    if(m_BallStorage.hasBall() && m_BallStorage.getBallCount() < 5){
+      m_BallStorage.reset();
+      m_BallStorage.moveSpace();
+    }else  {
+      if(!m_BallStorage.isShifted()) {m_BallStorage.bagMotorSetPosition(0.0);}
+    }
 
+    m_BallStorage.countBall();
   }
 
   // Called once the command ends or is interrupted.

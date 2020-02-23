@@ -5,38 +5,45 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands;
+package frc.robot.commands.drive;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.BallStorage;
+import frc.robot.Constants.DriveTrainConstants;
+import frc.robot.subsystems.DriveTrain;
 
-public class BallShift extends CommandBase {
-  BallStorage m_BallStorage;
+public class driveToLocation extends CommandBase {
+  private DriveTrain m_driveTrain;
+  private double m_distance;
+  
   /**
-   * Creates a new BallShift.
+   * Creates a new driveToLocation.
    */
-  public BallShift(BallStorage ballStorage) {
-    m_BallStorage = ballStorage;
-    addRequirements(ballStorage);
-    // Use addRequirements() here to declare subsystem dependencies.
+
+
+  public driveToLocation(DriveTrain driveTrain, double distance) {
+    m_driveTrain = driveTrain;    
+    m_distance = m_driveTrain.getInEncoderDistance(distance);
+
+    addRequirements(driveTrain);
+  }
+
+
+  //check to make sure we are at target
+  private boolean isAtTarget(){
+    if(Math.abs(m_driveTrain.getPosition() - m_distance) < DriveTrainConstants.kSPECIFICITY){
+      return true;
+    } else return false;
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    m_driveTrain.setReference(m_distance, m_distance);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if(m_BallStorage.hasBall() && m_BallStorage.getBallCount() < 5){
-      m_BallStorage.reset();
-      m_BallStorage.moveSpace();
-    }else  {
-      if(!m_BallStorage.isShifted()) {m_BallStorage.bagMotorSetPosition(0.0);}
-    }
-
-    m_BallStorage.countBall();
   }
 
   // Called once the command ends or is interrupted.
@@ -47,6 +54,8 @@ public class BallShift extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    if (isAtTarget()){
+    return true;
+    }else return false;
   }
 }
