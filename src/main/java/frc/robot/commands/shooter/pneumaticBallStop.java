@@ -8,17 +8,20 @@
 package frc.robot.commands.shooter;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shooter;
 
-public class StorageShoot extends CommandBase {
+public class pneumaticBallStop extends CommandBase {
   /**
-   * Creates a new StorageShoot.
+   * Creates a new pneumaticIntake.
    */
   Shooter shooter;
-  double speed;
-  public StorageShoot(Shooter shooter, double speed) {
-    this.shooter=shooter;
-    this.speed=speed;
+  String m_pos;
+
+  public pneumaticBallStop(Shooter shooter, String pos) {
+    this.shooter = shooter;
+    m_pos = pos;
+
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(shooter);
   }
@@ -26,7 +29,11 @@ public class StorageShoot extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    shooter.setSetpoint(speed);
+    if (m_pos == "down"){
+      shooter.down();
+    }else if(m_pos == "up"){
+      shooter.up();
+    }
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -42,6 +49,6 @@ public class StorageShoot extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return (Math.abs(shooter.getSpeed()-speed) < 100);
+    return true;
   }
 }

@@ -51,11 +51,11 @@ public class Shooter extends SubsystemBase {
     rightShooterMotor.follow(leftShooterMotor, true);    
   }
 
-  public void stopBall(){
+  public void down(){
     ballStop.set(kON);
   }
 
-  public void letBall(){
+  public void up(){
     ballStop.set(kOFF);
   }
 //TODO

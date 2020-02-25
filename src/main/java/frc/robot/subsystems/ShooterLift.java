@@ -10,8 +10,8 @@ package frc.robot.subsystems;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import static frc.robot.Constants.PneumaticConstants;
-import static frc.robot.Constants.PneumaticConstants.kON;
-import static frc.robot.Constants.PneumaticConstants.kOFF;
+import static frc.robot.Constants.ShooterConstants.kSON;
+import static frc.robot.Constants.ShooterConstants.kSOFF;
 
 
 public class ShooterLift extends SubsystemBase {
@@ -31,26 +31,33 @@ public class ShooterLift extends SubsystemBase {
     /*Case defines which 
      *position the shooter lift will go to. the pistons are different
      *sizes so we can use different combinations for different positions
+     *HARDWARE IS FLIPPED SO ALL SOLENOIDS ARE REVERSED
      */
     switch (pos) {
       case 0:
-        topSolenoid.set(kOFF);
-        bottomSolenoid.set(kOFF);
+        topSolenoid.set(kSOFF);
+        bottomSolenoid.set(kSOFF);
+        System.out.println(0);
         break;
       case 1:
-        topSolenoid.set(kOFF);
-        bottomSolenoid.set(kON);
+        topSolenoid.set(kSOFF);
+        bottomSolenoid.set(kSON);
+        System.out.println(1);
         break;
       case 2:
-        topSolenoid.set(kON);
-        bottomSolenoid.set(kOFF);
-      case 3:
-        topSolenoid.set(kON);
-        bottomSolenoid.set(kON);
-      default:
-      topSolenoid.set(kON);
-      bottomSolenoid.set(kOFF);
+        topSolenoid.set(kSON);
+        bottomSolenoid.set(kSOFF);
+        System.out.println(2);
         break;
+      case 3:
+        topSolenoid.set(kSON);
+        bottomSolenoid.set(kSON);
+        System.out.println(3);
+        break;
+      default:
+      topSolenoid.set(kSOFF);
+      bottomSolenoid.set(kSOFF);
+      break;
     }
   }
 
