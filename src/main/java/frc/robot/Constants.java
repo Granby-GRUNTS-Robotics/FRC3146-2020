@@ -44,7 +44,8 @@ public final class Constants {
         public static final int kLEFT_SHOOTER_MOTOR_PORT = 11;
         public static final int kRIGHT_SHOOTER_MOTOR_PORT = 10;
         public static final double kSHOOTER_NORMAL_SPEED = 0;
-        
+        public static final boolean kSON = false;
+        public static final boolean kSOFF = true;
 
         //shooter velocity pid constants
         public static final double kP = 0.0;
@@ -72,15 +73,16 @@ public final class Constants {
         public static final int kPCM_Port = 14;
 
         public static final int kFRONT_INTAKE_PORT = 0;
-        public static final int kBACK_INTAKE_PORT = 0;
+        public static final int kBACK_INTAKE_PORT = 1;
 
-        public static final int kFIRST_CLIMB_PORT = 0;
-        public static final int kSECOND_CLIMB_PORT = 0;
+        public static final int kFIRST_CLIMB_PORT = 4;
+        public static final int kSECOND_CLIMB_PORT = 5;
+        public static final int kThird_CLIMB_PORT = 6;
 
-        public static final int kSHOOTER_STOP_PORT = 0;
+        public static final int kSHOOTER_STOP_PORT = 7;
 
-        public static final int kTOP_SHOOTER_LIFT_PORT = 0;
-        public static final int kBOTTOM_SHOOTER_LIFT_PORT = 0;
+        public static final int kTOP_SHOOTER_LIFT_PORT = 3;
+        public static final int kBOTTOM_SHOOTER_LIFT_PORT = 2;
 
         public static final boolean kON = true;
         public static final boolean kOFF = false;

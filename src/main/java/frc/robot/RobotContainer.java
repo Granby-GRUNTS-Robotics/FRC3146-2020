@@ -7,7 +7,7 @@
 
 package frc.robot;
 
-import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.cscore.UsbCamera;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
@@ -15,11 +15,20 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.Button;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.ControlConstants;
 import frc.robot.commands.intake.BallShift;
+import frc.robot.commands.intake.MoveIntakeDOWN;
+import frc.robot.commands.intake.MoveIntakeUP;
+import frc.robot.commands.intake.intakeSet;
+import frc.robot.commands.intake.pneumaticIntake;
+import frc.robot.commands.shooter.Shoot;
+import frc.robot.commands.shooter.StorageShoot;
+import frc.robot.commands.shooter.pneumaticBallStop;
+import frc.robot.commands.shooter.pneumaticShooter;
 import frc.robot.commands.drive.drive;
 import frc.robot.commands.drive.driveToLocation;
 import frc.robot.subsystems.BallStorage;
@@ -47,8 +56,6 @@ public class RobotContainer {
 
   private final ShooterLift shooterLift = new ShooterLift();
   
-
-
   private final Intake intake = new Intake();
 
   private final BallStorage ballStorage = new BallStorage();
@@ -67,6 +74,7 @@ public class RobotContainer {
 
   //*/
 
+
   private ShuffleboardTab shooterTab = Shuffleboard.getTab("Shooter");
 
   
@@ -80,14 +88,34 @@ public class RobotContainer {
    * The container for the robot.  Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() {
-    shooterTab.add("Set Zero", new RunCommand(()->shooter.setSetpoint(0), shooter));
-    shooterTab.add("Set One", new RunCommand(()->shooter.setSetpoint(5000), shooter));
-    shooterTab.add("move bag", new RunCommand(()->ballStorage.addBallCounter(), ballStorage));
-    shooterTab.add("move piston F", new RunCommand(()->shooterLift.setPosition(0), shooterLift));
-    
+    //shooterTab.add("Set Zero", new StorageShoot(shooter, 0));
+    //shooterTab.add("Shoot", new Shoot(ballStorage, shooter));
+    shooterTab.add("move intake fwd", new RunCommand(()->intake.setIntakeMotorVelocity(0.35), intake));
+    shooterTab.add("move intake down", new pneumaticIntake(intake, "up"));
+    shooterTab.add("move intake down soft", new pneumaticIntake(intake, "soft"));
+    shooterTab.add("move intake off", new pneumaticIntake(intake, "off"));
 
-    driveTrain.setDefaultCommand(new drive(driveTrain, bottomPortJoystick.getRawAxis(ControlConstants.kJOYSTICK_Y), bottomPortJoystick.getRawAxis(ControlConstants.kJOYSTICK_TWIST)));
+    shooterTab.add("move ballstop up", new pneumaticBallStop(shooter, "down"));
+    shooterTab.add("move ballstop down", new pneumaticBallStop(shooter, "up"));
+
+    shooterTab.add("backtrack", new RunCommand(()-> ballStorage.backTrack() , ballStorage));
+
+    shooterTab.add("reset ball", new InstantCommand(()->ballStorage.resetBallCounter(), ballStorage));
+    shooterTab.add("move bag", new RunCommand(()->ballStorage.runMotor(.35), ballStorage));
+
+    shooterTab.add("shooter zero", new pneumaticShooter(shooterLift, 0));
+    shooterTab.add("shooter one", new pneumaticShooter(shooterLift, 1));
+    shooterTab.add("shooter two", new pneumaticShooter(shooterLift, 2));
+    shooterTab.add("shooter three", new pneumaticShooter(shooterLift, 3));
+
+    //
+    
+    driveTrain.setDefaultCommand(new drive(driveTrain, 
+                                           bottomPortJoystick));
+    
+    //*/
     ballStorage.setDefaultCommand(new BallShift(ballStorage));
+
     // Configure the button bindings*/
     configureButtonBindings();
   }
@@ -99,15 +127,10 @@ public class RobotContainer {
    * {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-      /*intakeButton.whenHeld(new RunCommand(()->intake.setIntakeMotorVelocity(0.75), intake))
-      .whenInactive(new RunCommand(()->intake.setIntakeMotorVelocity(0.0), intake));
-
-      intakeButton.whenHeld(new RunCommand(() -> ballStorage.runMotor(0.75), ballStorage))
-      .whenInactive(new RunCommand(() -> ballStorage.runMotor(0.0), ballStorage));
+      intakeButton.whenHeld(new Shoot(ballStorage, shooter)).whenReleased(new StorageShoot(shooter, 0)).whenReleased(new pneumaticBallStop(shooter, "up"));
       
-      counterResetButton.whenHeld(new RunCommand(()->shooter.setSetpoint(-2000), shooter))
-      .whenInactive(new RunCommand(()->shooter.setSetpoint(0.0), shooter));
-      //*/
+      counterResetButton.whenActive(new MoveIntakeDOWN(intake))
+      .whenInactive(new MoveIntakeUP(intake));
     }
 
 
