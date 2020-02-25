@@ -13,7 +13,7 @@ import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.revrobotics.Rev2mDistanceSensor;
 import com.revrobotics.Rev2mDistanceSensor.Port;
 
-import edu.wpi.first.wpilibj.Timer;
+import java.util.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.IntakeConstants;
 
@@ -29,9 +29,9 @@ public class BallStorage extends SubsystemBase {
   private String dwightMood = "ee";
   private int ballCount = 0;
   private int state_test = 0;
-  final Timer timer = new Timer();
+  private static final Timer timer = new Timer();
                                       
-  
+  double position = 0;
   /**
    * 
    * Creates a new BallStorage.
@@ -43,7 +43,7 @@ public class BallStorage extends SubsystemBase {
   }
 
   public boolean hasBall(){
-    return getDistanceSensor() < IntakeConstants.kBALL_DISTANCE_SETPOINT;
+    return getDistanceSensor() < IntakeConstants.kBALL_DISTANCE_SETPOINT && getDistanceSensor() != -1;
   }
 
   public BallStorage() {
@@ -51,21 +51,26 @@ public class BallStorage extends SubsystemBase {
     bagController.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder );
     bagController.configFactoryDefault();
     bagController.config_kP(0, 0.15);
+    resetEncoder();
     //Shuffleboard.getTab("John").add("Ball Count", getBallCount());
   }
 
   public double obtainEncoderPosition() {
-    return 0.0; //throughBoreEncoder.get();
+    return bagController.getSelectedSensorPosition();
   }
   public void bagMotorSetPosition(double position) {
     bagController.set(ControlMode.Position, position*4096);
   }
 
+  public void resetEncoder(){
+    bagController.setSelectedSensorPosition(0);
+  }
+
   @Override
   public void periodic() {
-    moveSpace();
-    System.out.println(ballCount);
+    //System.out.println(getBallCount() +" "+ obtainEncoderPosition());
     // This method will be called once per scheduler run
+    System.out.println("sensor: "+ getDistanceSensor()+", ball count: " + obtainEncoderPosition());
  }
 
   //once it gets a ball, increase the counter. Once the ball is gone, start reading again
@@ -83,12 +88,20 @@ public class BallStorage extends SubsystemBase {
   public int getBallCount(){
     return ballCount;
   }
-  public void reset(){
-    timer.reset();
+
+  public void backTrack(){
+    resetEncoder();
+    bagMotorSetPosition(-1);
+
   }
 
+  public int getState(){
+    return state_test;
+  }
+  
   public void moveSpace(){
-    bagMotorSetPosition(3*ballCount);
+    position++;
+    bagMotorSetPosition(3.5*position);
   }
 
   public boolean isShifted(){
@@ -103,6 +116,7 @@ public class BallStorage extends SubsystemBase {
   public void resetBallCounter(){
     ballCount = 0;
   }
+
   public void addBallCounter(){
     ballCount += 1;
   }

@@ -25,15 +25,15 @@ public class BallShift extends CommandBase {
   @Override
   public void initialize() {
   }
-
+  int state = 0;
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if(m_BallStorage.hasBall() && m_BallStorage.getBallCount() < 5){
-      m_BallStorage.reset();
+    if(m_BallStorage.hasBall() && state == 0 && m_BallStorage.getBallCount() < 5){
       m_BallStorage.moveSpace();
-    }else  {
-      if(!m_BallStorage.isShifted()) {m_BallStorage.bagMotorSetPosition(0.0);}
+      state++;
+    }else if (!m_BallStorage.hasBall()){
+      state = 0;
     }
 
     m_BallStorage.countBall();
