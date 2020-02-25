@@ -7,8 +7,9 @@
 
 package frc.robot.commands.drive;
 
+import frc.robot.Constants.ControlConstants;
 import frc.robot.subsystems.DriveTrain;
-
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 
@@ -20,20 +21,20 @@ public class drive extends CommandBase {
   
   //to give this subsysem access to its passed methods
   private final DriveTrain m_DriveTrain;
-  private Double m_speed;
-  private Double m_turn;
-
+  private Joystick m_joy;
+  private double m_turn;
+  private double m_speed;
   /**
    * Creates a new ExampleCommand.
    *
    * @param subsystem The subsystem used by this command.
    */
-  public drive(DriveTrain subsystem, Double spd, Double turn) {
+  public drive(DriveTrain subsystem,Joystick joy) {
     m_DriveTrain = subsystem;
     // Use addRequirements() here to declare subsystem dependencies.
+    m_joy = joy;
     addRequirements(subsystem);
-    m_speed = spd;
-    m_turn = turn;
+
   }
 
 
@@ -46,8 +47,11 @@ public class drive extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_DriveTrain.setReference(m_speed*30, m_turn*30);
-    //System.out.println("JJ");
+    m_DriveTrain.setReference(m_speed*30-m_turn*20, m_speed*30+m_turn*20);
+    System.out.println(m_speed + ", " + m_turn);
+    m_speed = m_joy.getRawAxis(ControlConstants.kJOYSTICK_Y);
+    m_turn = m_joy.getRawAxis(ControlConstants.kJOYSTICK_TWIST);//
+    
 
   }
 
