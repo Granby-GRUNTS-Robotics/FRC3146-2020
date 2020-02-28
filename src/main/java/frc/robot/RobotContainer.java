@@ -29,12 +29,15 @@ import frc.robot.commands.shooter.Shoot;
 import frc.robot.commands.shooter.StorageShoot;
 import frc.robot.commands.shooter.pneumaticBallStop;
 import frc.robot.commands.shooter.pneumaticShooter;
+import frc.robot.commands.climb.pneumaticClimb;
 import frc.robot.commands.drive.drive;
 import frc.robot.commands.drive.driveToLocation;
+import frc.robot.commands.drive.xboxDrive;
 import frc.robot.subsystems.BallStorage;
 import frc.robot.subsystems.ColorSensor;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.LiftMechanism;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.ShooterLift;
 
@@ -60,13 +63,15 @@ public class RobotContainer {
 
   private final BallStorage ballStorage = new BallStorage();
 
+  private final LiftMechanism lift = new LiftMechanism();
+
   //private final ColorSensor colorSensor = new ColorSensor();
 
   private final driveToLocation m_autoCommand = new driveToLocation(driveTrain, 0);
 
   public final Joystick bottomPortJoystick = new Joystick(ControlConstants.kDRIVE_CONTROLLER_PORT);
   
-  public final Joystick topPortJoystick = new Joystick(ControlConstants.kTANK_DRIVE_CONTROLLER_PORT);
+  public final XboxController NicoController = new XboxController(ControlConstants.kDRIVE_CONTROLLER_PORT);
 
   private final Button intakeButton = new JoystickButton(bottomPortJoystick, 1);
 
@@ -88,12 +93,27 @@ public class RobotContainer {
    * The container for the robot.  Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() {
-    //shooterTab.add("Set Zero", new StorageShoot(shooter, 0));
-    //shooterTab.add("Shoot", new Shoot(ballStorage, shooter));
-    shooterTab.add("move intake fwd", new RunCommand(()->intake.setIntakeMotorVelocity(0.35), intake));
-    shooterTab.add("move intake down", new pneumaticIntake(intake, "up"));
+    shooterTab.add("Set Zero", new StorageShoot(shooter, 0));
+    shooterTab.add("Set One", new StorageShoot(shooter, 5000));
+
+    shooterTab.add("Shoot", new Shoot(ballStorage, shooter, 4000));
+    shooterTab.add("move intake up", new pneumaticIntake(intake, "up"));
+    shooterTab.add("move intake down", new pneumaticIntake(intake, "down"));
     shooterTab.add("move intake down soft", new pneumaticIntake(intake, "soft"));
     shooterTab.add("move intake off", new pneumaticIntake(intake, "off"));
+
+    shooterTab.add("move lift up", new pneumaticClimb(lift, "up"));
+    shooterTab.add("move lift upp", new pneumaticClimb(lift, "upp"));
+    shooterTab.add("move lift down", new pneumaticClimb(lift, "down"));
+    shooterTab.add("move lift offNotExtra", new pneumaticClimb(lift,"offNotExtra"));
+    shooterTab.add("move lift off", new pneumaticClimb(lift, "off"));
+
+
+    shooterTab.add("run winch up", new RunCommand(()->lift.winchControl(0.5), lift));
+    shooterTab.add("run winch down", new RunCommand(()->lift.winchControl(-0.3), lift));
+    shooterTab.add("run winch 0", new RunCommand(()->lift.winchControl(0), lift));
+
+
 
     shooterTab.add("move ballstop up", new pneumaticBallStop(shooter, "down"));
     shooterTab.add("move ballstop down", new pneumaticBallStop(shooter, "up"));
@@ -110,8 +130,8 @@ public class RobotContainer {
 
     //
     
-    driveTrain.setDefaultCommand(new drive(driveTrain, 
-                                           bottomPortJoystick));
+    driveTrain.setDefaultCommand(new xboxDrive(driveTrain, 
+                                           NicoController));
     
     //*/
     ballStorage.setDefaultCommand(new BallShift(ballStorage));
@@ -127,10 +147,13 @@ public class RobotContainer {
    * {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-      intakeButton.whenHeld(new Shoot(ballStorage, shooter)).whenReleased(new StorageShoot(shooter, 0)).whenReleased(new pneumaticBallStop(shooter, "up"));
+      intakeButton.whenHeld(new Shoot(ballStorage, shooter, 3000))
+      .whenReleased(new StorageShoot(shooter, 0))
+      .whenReleased(new pneumaticBallStop(shooter, "up"));
+      intakeButton.whenInactive(new InstantCommand(()->ballStorage.resetBallCounter()));
       
-      counterResetButton.whenActive(new MoveIntakeDOWN(intake))
-      .whenInactive(new MoveIntakeUP(intake));
+      counterResetButton.whenActive(new MoveIntakeDOWN(intake, shooterLift));
+      counterResetButton.whenReleased(new MoveIntakeUP(intake));
     }
 
 

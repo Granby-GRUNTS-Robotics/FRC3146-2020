@@ -70,7 +70,7 @@ public class BallStorage extends SubsystemBase {
   public void periodic() {
     //System.out.println(getBallCount() +" "+ obtainEncoderPosition());
     // This method will be called once per scheduler run
-    System.out.println("sensor: "+ getDistanceSensor()+", ball count: " + obtainEncoderPosition());
+    System.out.println("sensor: "+ getDistanceSensor()+", ball count: " + getBallCount());
  }
 
   //once it gets a ball, increase the counter. Once the ball is gone, start reading again
@@ -101,7 +101,7 @@ public class BallStorage extends SubsystemBase {
   
   public void moveSpace(){
     position++;
-    bagMotorSetPosition(3.5*position);
+    bagMotorSetPosition(2.5*position);
   }
 
   public boolean isShifted(){
@@ -114,7 +114,7 @@ public class BallStorage extends SubsystemBase {
   }
 
   public void resetBallCounter(){
-    ballCount = 0;
+    ballCount = 0; position = 0; runMotor(0);
   }
 
   public void addBallCounter(){

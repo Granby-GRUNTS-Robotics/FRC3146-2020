@@ -75,9 +75,9 @@ public final class Constants {
         public static final int kFRONT_INTAKE_PORT = 0;
         public static final int kBACK_INTAKE_PORT = 1;
 
-        public static final int kFIRST_CLIMB_PORT = 4;
-        public static final int kSECOND_CLIMB_PORT = 5;
-        public static final int kThird_CLIMB_PORT = 6;
+        public static final int kFIRST_CLIMB_PORT = 5;
+        public static final int kSECOND_CLIMB_PORT = 6;
+        public static final int kThird_CLIMB_PORT = 4;
 
         public static final int kSHOOTER_STOP_PORT = 7;
 
@@ -110,12 +110,18 @@ public final class Constants {
         public static final int kTANK_DRIVE_CONTROLLER_PORT = 1;
         public static final int kJOYSTICK_TWIST = 2;
         public static final int kJOYSTICK_Y = 1;
+        public static final int kXBOX_X = 0;
+        public static final int kXBOX_LT = 2;
+        public static final int kXBOX_RT = 3;
+        public static final int kXBOX_Y = 1;
+    
     
         
     }
 
     public static final class LiftConstants {
         public static final int[] kLIFT_MOTOR_PORTS = {8,9};
+        public static final int voltageMax = 40;
     }
 
 

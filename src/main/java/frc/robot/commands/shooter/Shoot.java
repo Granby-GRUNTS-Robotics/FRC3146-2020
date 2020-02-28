@@ -20,17 +20,17 @@ public class Shoot extends SequentialCommandGroup {
   /**
    * Creates a new Shoot.
    */
-  public Shoot(BallStorage ballStorage, Shooter shooter) {
+  public Shoot(BallStorage ballStorage, Shooter shooter, double pos) {
     // Add your commands in the super() call, e.g.
     // super(new FooCommand(), new BarCommand());
     super(    
       new InstantCommand(()->ballStorage.resetBallCounter(), ballStorage),
       new InstantCommand(()->ballStorage.backTrack(), ballStorage),
       new pneumaticBallStop(shooter, "down"),
-      new StorageShoot(shooter, 4000),
+      new StorageShoot(shooter, pos),
+      new InstantCommand(()->ballStorage.resetBallCounter(), ballStorage),
       new InstantCommand(()->ballStorage.runMotor(0.5), ballStorage),
-      new InstantCommand(()->ballStorage.resetEncoder(), ballStorage),
-      new InstantCommand(()->ballStorage.resetBallCounter(), ballStorage)
+      new InstantCommand(()->ballStorage.resetEncoder(), ballStorage)
 
 
     

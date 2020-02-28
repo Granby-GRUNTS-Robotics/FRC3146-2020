@@ -5,30 +5,26 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands.shooter;
+package frc.robot.commands.intake;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.ShooterLift;
+import frc.robot.subsystems.BallStorage;
 
-public class pneumaticShooter extends CommandBase {
+public class ForceShift extends CommandBase {
   /**
-   * Creates a new pneumaticShooter.
+   * Creates a new ForceShift.
    */
-  ShooterLift shooterLift;
-  int pos;
-  double un;
-
-  public pneumaticShooter(ShooterLift shooterLift, int pos) {
-    this.shooterLift = shooterLift;
-    this.pos = pos;
+  BallStorage ballStorage;
+  public ForceShift(BallStorage ballStorage) {
+    this.ballStorage = ballStorage;
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(shooterLift);
+    addRequirements(ballStorage);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    shooterLift.setPosition(pos);
+    ballStorage.moveSpace();
   }
 
   // Called every time the scheduler runs while the command is scheduled.

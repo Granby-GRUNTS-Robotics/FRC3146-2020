@@ -10,18 +10,19 @@ package frc.robot.commands.drive;
 import frc.robot.Constants.ControlConstants;
 import frc.robot.subsystems.DriveTrain;
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 
 /**
  * An example command that uses an example subsystem.
  */
-public class drive extends CommandBase {
+public class xboxDrive extends CommandBase {
   @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
   
   //to give this subsysem access to its passed methods
   private final DriveTrain m_DriveTrain;
-  private Joystick m_joy;
+  private XboxController m_joy;
   private double m_turn;
   private double m_speed;
   /**
@@ -29,7 +30,7 @@ public class drive extends CommandBase {
    *
    * @param subsystem The subsystem used by this command.
    */
-  public drive(DriveTrain subsystem,Joystick joy) {
+  public xboxDrive(DriveTrain subsystem,XboxController joy) {
     m_DriveTrain = subsystem;
     // Use addRequirements() here to declare subsystem dependencies.
     m_joy = joy;
@@ -49,8 +50,8 @@ public class drive extends CommandBase {
   public void execute() {
     m_DriveTrain.setReference(m_speed*30-m_turn*20, m_speed*30+m_turn*20);
     System.out.println(m_speed + ", " + m_turn);
-    m_speed = m_joy.getRawAxis(1);
-    m_turn = m_joy.getRawAxis(0);//
+    m_speed = -m_joy.getRawAxis(ControlConstants.kXBOX_RT)+m_joy.getRawAxis(ControlConstants.kXBOX_LT);
+    m_turn = m_joy.getRawAxis(ControlConstants.kXBOX_X);//
     
 
   }

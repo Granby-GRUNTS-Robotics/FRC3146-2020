@@ -5,30 +5,46 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands.shooter;
+package frc.robot.commands.climb;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.ShooterLift;
+import frc.robot.subsystems.LiftMechanism;
 
-public class pneumaticShooter extends CommandBase {
+public class pneumaticClimb extends CommandBase {
   /**
-   * Creates a new pneumaticShooter.
+   * Creates a new pneumaticClimb.
    */
-  ShooterLift shooterLift;
-  int pos;
-  double un;
+  LiftMechanism lift;
+String pos;
 
-  public pneumaticShooter(ShooterLift shooterLift, int pos) {
-    this.shooterLift = shooterLift;
+  public pneumaticClimb(LiftMechanism lift, String pos) {
+    this.lift = lift;
     this.pos = pos;
+    addRequirements(lift);
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(shooterLift);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    shooterLift.setPosition(pos);
+    switch (pos) {
+      case "up":
+        lift.up();
+        break;
+      case "upp":
+        lift.upp();
+        break;
+      case "down":
+        lift.down();
+        break;
+      case "offNotExtra":
+        lift.offNotExtra();
+        break;
+      case "off":
+        lift.off();
+      default:
+        break;
+    }
   }
 
   // Called every time the scheduler runs while the command is scheduled.
