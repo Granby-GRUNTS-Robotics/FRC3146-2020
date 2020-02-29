@@ -7,7 +7,7 @@
 
 package frc.robot;
 
-import edu.wpi.cscore.UsbCamera;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
@@ -20,21 +20,21 @@ import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.Button;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.ControlConstants;
+import frc.robot.commands.climb.pneumaticClimb;
+import frc.robot.commands.drive.drive;
+import frc.robot.commands.drive.driveToLocation;
+import frc.robot.commands.drive.limeTurn;
+import frc.robot.commands.drive.turnToLocation;
+import frc.robot.commands.drive.xboxDrive;
 import frc.robot.commands.intake.BallShift;
 import frc.robot.commands.intake.MoveIntakeDOWN;
 import frc.robot.commands.intake.MoveIntakeUP;
-import frc.robot.commands.intake.intakeSet;
 import frc.robot.commands.intake.pneumaticIntake;
 import frc.robot.commands.shooter.Shoot;
 import frc.robot.commands.shooter.StorageShoot;
 import frc.robot.commands.shooter.pneumaticBallStop;
 import frc.robot.commands.shooter.pneumaticShooter;
-import frc.robot.commands.climb.pneumaticClimb;
-import frc.robot.commands.drive.drive;
-import frc.robot.commands.drive.driveToLocation;
-import frc.robot.commands.drive.xboxDrive;
 import frc.robot.subsystems.BallStorage;
-import frc.robot.subsystems.ColorSensor;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.LiftMechanism;
@@ -70,7 +70,9 @@ public class RobotContainer {
   private final driveToLocation m_autoCommand = new driveToLocation(driveTrain, 0);
 
   public final Joystick bottomPortJoystick = new Joystick(ControlConstants.kDRIVE_CONTROLLER_PORT);
-  
+
+  public final Joystick topPortJoystick = new Joystick(ControlConstants.kBUTTON_JOYSTICK_PORT);
+
   public final XboxController NicoController = new XboxController(ControlConstants.kDRIVE_CONTROLLER_PORT);
 
   private final Button intakeButton = new JoystickButton(bottomPortJoystick, 1);
@@ -109,11 +111,9 @@ public class RobotContainer {
     shooterTab.add("move lift off", new pneumaticClimb(lift, "off"));
 
 
-    shooterTab.add("run winch up", new RunCommand(()->lift.winchControl(0.5), lift));
-    shooterTab.add("run winch down", new RunCommand(()->lift.winchControl(-0.3), lift));
-    shooterTab.add("run winch 0", new RunCommand(()->lift.winchControl(0), lift));
+    shooterTab.add("run winch Joy", new RunCommand(()->lift.winchControl(topPortJoystick.getRawAxis(ControlConstants.kJOYSTICK_Y)), lift));
 
-
+    shooterTab.add("90 degree turn", new turnToLocation(driveTrain, 90));
 
     shooterTab.add("move ballstop up", new pneumaticBallStop(shooter, "down"));
     shooterTab.add("move ballstop down", new pneumaticBallStop(shooter, "up"));
@@ -128,13 +128,17 @@ public class RobotContainer {
     shooterTab.add("shooter two", new pneumaticShooter(shooterLift, 2));
     shooterTab.add("shooter three", new pneumaticShooter(shooterLift, 3));
 
+    shooterTab.add("KeyLimePi On", new InstantCommand(() -> NetworkTableInstance.getDefault().getTable("limelight").getEntry("ledMode").setNumber(0)));
+    shooterTab.add("KeyLimePi Off", new InstantCommand(() -> NetworkTableInstance.getDefault().getTable("limelight").getEntry("ledMode").setNumber(1)));
+
+    shooterTab.add("limeturn", new limeTurn(driveTrain));
     //
     
-    driveTrain.setDefaultCommand(new xboxDrive(driveTrain, 
-                                           NicoController));
+    /*driveTrain.setDefaultCommand(new drive(driveTrain, 
+                                           bottomPortJoystick));
     
     //*/
-    ballStorage.setDefaultCommand(new BallShift(ballStorage));
+    //ballStorage.setDefaultCommand(new BallShift(ballStorage));
 
     // Configure the button bindings*/
     configureButtonBindings();
@@ -147,7 +151,7 @@ public class RobotContainer {
    * {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-      intakeButton.whenHeld(new Shoot(ballStorage, shooter, 3000))
+      intakeButton.whenHeld(new Shoot(ballStorage, shooter, 2300))
       .whenReleased(new StorageShoot(shooter, 0))
       .whenReleased(new pneumaticBallStop(shooter, "up"));
       intakeButton.whenInactive(new InstantCommand(()->ballStorage.resetBallCounter()));

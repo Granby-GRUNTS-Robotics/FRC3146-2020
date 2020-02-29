@@ -29,6 +29,7 @@ public final class Constants {
         public static final int kRIGHT_SLAVE_MOTOR_PORT = 3;
         public static final int kLEFT_SLAVE_MOTOR_PORT = 4;
         public static final double kSPECIFICITY = 0.1;
+        public static final double kDEGREE_SPECIFICITY = 2;
 
         //Used for velocity PID control of the drive base. Must reconfigure once full weight is on the drive base
         public final static double kP = 0.029;
@@ -105,7 +106,7 @@ public final class Constants {
      * Not sure if we will make a controller subclass, just for future convenience putting constants here
      */
     public static final class ControlConstants {
-        public static final int kBUTTON_JOYSTICK_PORT = 0;
+        public static final int kBUTTON_JOYSTICK_PORT = 1;
         public static final int kDRIVE_CONTROLLER_PORT = 0;
         public static final int kTANK_DRIVE_CONTROLLER_PORT = 1;
         public static final int kJOYSTICK_TWIST = 2;

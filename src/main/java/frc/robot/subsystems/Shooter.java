@@ -7,21 +7,19 @@
 
 package frc.robot.subsystems;
 
+import static frc.robot.Constants.PneumaticConstants.kOFF;
+import static frc.robot.Constants.PneumaticConstants.kON;
+
 import com.revrobotics.CANEncoder;
 import com.revrobotics.CANPIDController;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.ControlType;
 
-import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.Solenoid;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
-import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants.PneumaticConstants;
 import frc.robot.Constants.ShooterConstants;
-import static frc.robot.Constants.PneumaticConstants;
-import static frc.robot.Constants.PneumaticConstants.kON;
-import static frc.robot.Constants.PneumaticConstants.kOFF;
 
 public class Shooter extends SubsystemBase {
   /**
@@ -48,7 +46,10 @@ public class Shooter extends SubsystemBase {
   public Shooter() {
     rightShooterMotor.setInverted(false);
     leftShooterMotor.setInverted(false);
-    rightShooterMotor.follow(leftShooterMotor, true);    
+    rightShooterMotor.follow(leftShooterMotor, true); 
+    
+    rightEncoder.setPosition(0.0);
+    leftEncoder.setPosition(0.0);
   }
 
   public void down(){
