@@ -7,11 +7,10 @@
 
 package frc.robot.commands.drive;
 
-import frc.robot.Constants.ControlConstants;
-import frc.robot.subsystems.DriveTrain;
-import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Constants.ControlConstants;
+import frc.robot.subsystems.DriveTrain;
 
 
 /**

@@ -14,7 +14,7 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.ControlType;
 
-import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.DriveTrainConstants;
 import frc.robot.Constants.SensorConstants;
@@ -50,6 +50,9 @@ public class DriveTrain extends SubsystemBase {
   private final CANEncoder rightDriveEncoder = rightDriveMotor.getEncoder();
   private final CANEncoder rightSlaveEncoder = rightSlaveMotor.getEncoder();
 
+  //Defining networkTables
+
+
   //for trajectory generation and PID drive
   private final CANPIDController leftController = new CANPIDController(leftDriveMotor);
   private final CANPIDController rightController = new CANPIDController(rightDriveMotor);
@@ -79,9 +82,11 @@ public class DriveTrain extends SubsystemBase {
 
     leftController.setP(0.027);
     leftDriveEncoder.setPosition(0.0);
+    leftSlaveEncoder.setPosition(0.0);
 
     rightController.setP(0.027);
     rightDriveEncoder.setPosition(0.0);
+    rightSlaveEncoder.setPosition(0.0);
 
   }
 /* A BUNCH OF COMMANDS ARE DEFINED HERE FOR USE IN OTHER PARTS OF THE CODE*/
@@ -115,13 +120,17 @@ public class DriveTrain extends SubsystemBase {
     return -encoder_units*6*Math.PI/10.71; 
   }
 
+  public double getFusedHeading(){
+    return pigeonIMU.getFusedHeading();
+  }
+
   //TODO
   /*double rotToPID(double fwd, double rot){
     return 0;
   }*/
 
-  public double getVelocityInRPM(double velocity_per_second){
-    return velocity_per_second * 10.71;
+  public double getTurnInEncoderDistance(double degrees){
+    return getInEncoderDistance(degrees/360*24*Math.PI);
   }
 
   public void setReference(double left, double right){
@@ -133,7 +142,7 @@ public class DriveTrain extends SubsystemBase {
   //CONSTANTLY CALLED. BE VERY CAREFUL WITH WHAT YOU PUT IN HERE
   @Override
   public void periodic() {
-    // This method will be called once per scheduler run
+    SmartDashboard.putNumber("jj", pigeonIMU.getFusedHeading());// This method will be called once per scheduler run
     //Jane Gradle
   }
   

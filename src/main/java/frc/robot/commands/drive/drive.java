@@ -49,8 +49,8 @@ public class drive extends CommandBase {
   public void execute() {
     m_DriveTrain.setReference(m_speed*30-m_turn*20, m_speed*30+m_turn*20);
     System.out.println(m_speed + ", " + m_turn);
-    m_speed = m_joy.getRawAxis(1);
-    m_turn = m_joy.getRawAxis(0);//
+    m_speed = m_joy.getRawAxis(ControlConstants.kJOYSTICK_Y);
+    m_turn = m_joy.getRawAxis(ControlConstants.kJOYSTICK_TWIST);//
     
 
   }
