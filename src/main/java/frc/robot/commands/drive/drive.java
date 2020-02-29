@@ -11,21 +11,22 @@ import frc.robot.Constants.ControlConstants;
 import frc.robot.subsystems.DriveTrain;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import static frc.robot.Constants.ControlConstants.kTHROTTLE_MULTIPLIER;
+import static frc.robot.Constants.ControlConstants.kTWIST_MULTIPLIER;
 
 
 /**
  * An example command that uses an example subsystem.
  */
 public class drive extends CommandBase {
-  @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
-  
-  //to give this subsysem access to its passed methods
+
+  //Joystick is passed instead of doubles for more variability within the command itsself
   private final DriveTrain m_DriveTrain;
   private Joystick m_joy;
   private double m_turn;
   private double m_speed;
   /**
-   * Creates a new ExampleCommand.
+   * Creates a new drive command.
    *
    * @param subsystem The subsystem used by this command.
    */
@@ -47,11 +48,19 @@ public class drive extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_DriveTrain.setReference(m_speed*30-m_turn*20, m_speed*30+m_turn*20);
-    System.out.println(m_speed + ", " + m_turn);
     m_speed = m_joy.getRawAxis(ControlConstants.kJOYSTICK_Y);
     m_turn = m_joy.getRawAxis(ControlConstants.kJOYSTICK_TWIST);//
+
+    //deadzone code w/ simplified if-else statement
+    m_speed = ((Math.abs(m_speed) < ControlConstants.kDEADZONE) ? (0) : (m_speed));
+    m_turn = ((Math.abs(m_turn)<ControlConstants.kDEADZONE) ? (0) : (m_turn));
     
+    //sets the target speed based on axes
+    m_DriveTrain.setReference(m_speed*kTHROTTLE_MULTIPLIER-m_turn*kTWIST_MULTIPLIER, 
+                              m_speed*kTHROTTLE_MULTIPLIER+m_turn*kTWIST_MULTIPLIER);
+    
+    //for testing
+    //System.out.println(m_speed + ", " + m_turn);
 
   }
 
@@ -60,7 +69,8 @@ public class drive extends CommandBase {
   public void end(boolean interrupted) {
   }
 
-  // Returns true when the command should end.
+  // Returns true when the command should end
+  //default command so never finished
   @Override
   public boolean isFinished() {
     return false;

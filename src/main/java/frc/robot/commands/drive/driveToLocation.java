@@ -12,6 +12,8 @@ import frc.robot.Constants.DriveTrainConstants;
 import frc.robot.subsystems.DriveTrain;
 
 public class driveToLocation extends CommandBase {
+  
+  
   private DriveTrain m_driveTrain;
   private double m_distance;
   
@@ -22,6 +24,7 @@ public class driveToLocation extends CommandBase {
 
   public driveToLocation(DriveTrain driveTrain, double distance) {
     m_driveTrain = driveTrain;    
+    //just gets it in encoder distance here rather than later in the code
     m_distance = m_driveTrain.getInEncoderDistance(distance);
 
     addRequirements(driveTrain);
@@ -36,6 +39,7 @@ public class driveToLocation extends CommandBase {
   }
 
   // Called when the command is initially scheduled.
+  //not under execute, because we only want it to run once
   @Override
   public void initialize() {
     m_driveTrain.setReference(m_distance, m_distance);

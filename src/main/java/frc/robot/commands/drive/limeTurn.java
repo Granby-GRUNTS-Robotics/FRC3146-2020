@@ -37,7 +37,9 @@ public class limeTurn extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    //gets limelight turn ("tx") value from Network Tables
     degrees = NetworkTableInstance.getDefault().getTable("limelight").getEntry("tx").getDouble(0);
+    //changes the degree turn amount into correct distance for the motors to run
     distance = driveTrain.getTurnInEncoderDistance(getLimelightInDegrees(degrees));
     driveTrain.setReference(-distance, distance);
   }
@@ -48,6 +50,7 @@ public class limeTurn extends CommandBase {
   }
 
   // Returns true when the command should end.
+  //used as a default command for now, we will see for auto what we will do
   @Override
   public boolean isFinished() {
     return false;

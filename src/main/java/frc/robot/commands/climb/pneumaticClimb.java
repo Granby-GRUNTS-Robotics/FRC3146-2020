@@ -14,8 +14,9 @@ public class pneumaticClimb extends CommandBase {
   /**
    * Creates a new pneumaticClimb.
    */
+  //used a string so writing the commands in other files is more intuitive
   LiftMechanism lift;
-String pos;
+  String pos;
 
   public pneumaticClimb(LiftMechanism lift, String pos) {
     this.lift = lift;
@@ -27,6 +28,8 @@ String pos;
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    //one more unused case w/ lift down & extended. 
+    //Only called once because solenoids are just on/off
     switch (pos) {
       case "up":
         lift.up();
@@ -60,6 +63,7 @@ String pos;
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
+    //ends instantly, possibly add timer if neccessary
     return true;
   }
 }

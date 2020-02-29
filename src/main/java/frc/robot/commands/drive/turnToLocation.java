@@ -29,6 +29,7 @@ public class turnToLocation extends CommandBase {
   }
 
   // Called when the command is initially scheduled.
+  //changes to offset from pigeonIMU for use in feedback loop, rather than blind turning
   @Override
   public void initialize() {
     initial = driveTrain.getFusedHeading();
@@ -38,9 +39,12 @@ public class turnToLocation extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    //distance to target changes each time, we will see if this works or not
     distance = driveTrain.getTurnInEncoderDistance(degrees - driveTrain.getFusedHeading());
-    System.out.println(distance);
+    //sets the actual reference point
     driveTrain.setReference(-distance, distance);
+    //for troubleshooting
+    //System.out.println(distance);
   }
 
   // Called once the command ends or is interrupted.

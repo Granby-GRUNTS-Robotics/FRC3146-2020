@@ -116,8 +116,10 @@ public final class Constants {
         public static final int kXBOX_RT = 3;
         public static final int kXBOX_Y = 1;
     
-    
-        
+        public static final double kTWIST_MULTIPLIER = 20;
+        public static final double kTHROTTLE_MULTIPLIER = 30;
+        public static final double kDEADZONE = 0.05;
+
     }
 
     public static final class LiftConstants {

@@ -11,14 +11,14 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants.ControlConstants;
 import frc.robot.subsystems.DriveTrain;
-
+import static frc.robot.Constants.ControlConstants.kTHROTTLE_MULTIPLIER;
+import static frc.robot.Constants.ControlConstants.kTWIST_MULTIPLIER;
 
 /**
  * An example command that uses an example subsystem.
  */
 public class xboxDrive extends CommandBase {
-  @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
-  
+
   //to give this subsysem access to its passed methods
   private final DriveTrain m_DriveTrain;
   private XboxController m_joy;
@@ -47,12 +47,16 @@ public class xboxDrive extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_DriveTrain.setReference(m_speed*30-m_turn*20, m_speed*30+m_turn*20);
-    System.out.println(m_speed + ", " + m_turn);
+    //speed just as the sum of both triggers
     m_speed = -m_joy.getRawAxis(ControlConstants.kXBOX_RT)+m_joy.getRawAxis(ControlConstants.kXBOX_LT);
     m_turn = m_joy.getRawAxis(ControlConstants.kXBOX_X);//
-    
 
+    //sets reference after deadzone has been applied
+    m_DriveTrain.setReference(m_speed*kTHROTTLE_MULTIPLIER-m_turn*kTWIST_MULTIPLIER, 
+                              m_speed*kTHROTTLE_MULTIPLIER+m_turn*kTWIST_MULTIPLIER);
+    
+    //for troubleshooting
+    //System.out.println(m_speed + ", " + m_turn);
   }
 
   // Called once the command ends or is interrupted.

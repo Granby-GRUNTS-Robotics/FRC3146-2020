@@ -14,7 +14,6 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.ControlType;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.DriveTrainConstants;
 import frc.robot.Constants.SensorConstants;
@@ -56,19 +55,7 @@ public class DriveTrain extends SubsystemBase {
   //for trajectory generation and PID drive
   private final CANPIDController leftController = new CANPIDController(leftDriveMotor);
   private final CANPIDController rightController = new CANPIDController(rightDriveMotor);
-  
-  //Add kinematics and odometry things
 
-    
-  //makes the encoders a group for pid
-
-  // Defines the speed controller groups, slaves leftSlaveMotor to leftDriveMotor
-
-  // differential drive because robotDrive is deprecated, no difference, simply
-  // different term with a slightly different definition
-  //private final DifferentialDrive m_drive = new DifferentialDrive(leftDriveMotor, rightDriveMotor);
-
-  // Not Definite, going to be used
 
   public DriveTrain() {
     //make slaves follow their masters
@@ -91,12 +78,8 @@ public class DriveTrain extends SubsystemBase {
   }
 /* A BUNCH OF COMMANDS ARE DEFINED HERE FOR USE IN OTHER PARTS OF THE CODE*/
 
-  //Defined here so that commands can use the same method
-  /*public void arcadeDrive(double fwd, double rot){
-    m_drive.arcadeDrive(fwd, rot);
-  }*/
+  //better methods than calling them directly
 
-  //better method than calling it directly
   public double getLeftEncoderPosition(){
     return leftDriveEncoder.getPosition();
   }
@@ -110,7 +93,6 @@ public class DriveTrain extends SubsystemBase {
     return initial;
   }
 
-  
   public double getInEncoderDistance(double distance){
     double final_value = -(distance)/6/Math.PI*10.71;
     return final_value;
@@ -124,26 +106,21 @@ public class DriveTrain extends SubsystemBase {
     return pigeonIMU.getFusedHeading();
   }
 
-  //TODO
-  /*double rotToPID(double fwd, double rot){
-    return 0;
-  }*/
-
   public double getTurnInEncoderDistance(double degrees){
+    //simple trig w/ wheel to wheel as the "diameter"
     return getInEncoderDistance(degrees/360*24*Math.PI);
   }
 
+  //used for pretty much everything
   public void setReference(double left, double right){
     leftController.setReference(getLeftEncoderPosition()+ left , ControlType.kPosition);
     rightController.setReference(getRightEncoderPosition()+ right, ControlType.kPosition);
   }
 
-
   //CONSTANTLY CALLED. BE VERY CAREFUL WITH WHAT YOU PUT IN HERE
   @Override
   public void periodic() {
-    SmartDashboard.putNumber("jj", pigeonIMU.getFusedHeading());// This method will be called once per scheduler run
-    //Jane Gradle
+    //SmartDashboard.putNumber("jj", pigeonIMU.getFusedHeading());
   }
   
 }
