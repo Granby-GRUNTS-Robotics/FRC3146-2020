@@ -62,6 +62,7 @@ public final class Constants {
         public static final int kINTAKE_MOTOR_PORT = 6;
         public static final double kINTAKE_NORMAL_SPEED = 0;
         public static final int kBAG_CONTROLLER_PORT = 7;
+        public static final double kBALL_STORAGE_DISTANCE = 3;
         public static final int[] kTHROUGH_BORE_PORT = {0,0};
         public static final int kBALL_DISTANCE_SETPOINT = 160;
     }
@@ -111,6 +112,7 @@ public final class Constants {
         public static final int kTANK_DRIVE_CONTROLLER_PORT = 1;
         public static final int kJOYSTICK_TWIST = 2;
         public static final int kJOYSTICK_Y = 1;
+        public static final int kJOYSTICK_SLIDER = 3;
         public static final int kXBOX_X = 0;
         public static final int kXBOX_LT = 2;
         public static final int kXBOX_RT = 3;

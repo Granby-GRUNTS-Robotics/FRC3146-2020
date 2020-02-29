@@ -27,6 +27,7 @@ import frc.robot.commands.drive.limeTurn;
 import frc.robot.commands.drive.turnToLocation;
 import frc.robot.commands.drive.xboxDrive;
 import frc.robot.commands.intake.BallShift;
+import frc.robot.commands.intake.ForceShift;
 import frc.robot.commands.intake.MoveIntakeDOWN;
 import frc.robot.commands.intake.MoveIntakeUP;
 import frc.robot.commands.intake.pneumaticIntake;
@@ -40,6 +41,7 @@ import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.LiftMechanism;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.ShooterLift;
+import frc.robot.subsystems.Vision;
 
 /**
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -52,6 +54,8 @@ public class RobotContainer {
   DriverStation mDriverStation;
   
   // The robot's subsystems and commands are defined here...
+
+  public final Vision vision = new Vision();
   
   public final DriveTrain driveTrain = new DriveTrain();
   
@@ -74,11 +78,16 @@ public class RobotContainer {
   public final Joystick topPortJoystick = new Joystick(ControlConstants.kBUTTON_JOYSTICK_PORT);
 
   public final XboxController NicoController = new XboxController(ControlConstants.kDRIVE_CONTROLLER_PORT);
-
-  private final Button intakeButton = new JoystickButton(bottomPortJoystick, 1);
-
-  private final Button counterResetButton = new JoystickButton(bottomPortJoystick, 2);
-
+  //Wher I define a whole crapload of buttons
+  private final Button intakeButton = new JoystickButton(topPortJoystick, 2);
+  private final Button shootButton = new JoystickButton(topPortJoystick, 1);
+  private final Button magazineZeroButton = new JoystickButton(topPortJoystick, 12);
+  private final Button magazineOneButton = new JoystickButton(topPortJoystick, 10);
+  private final Button magazineTwoButton = new JoystickButton(topPortJoystick, 8);
+  private final Button magazineThreeButton = new JoystickButton(topPortJoystick, 7);
+  private final Button intakeUp = new JoystickButton(topPortJoystick, 5);
+  private final Button intakeDown = new JoystickButton(topPortJoystick, 6);
+  private final Button bagForceButton = new JoystickButton(topPortJoystick, 3);
   //*/
 
 
@@ -95,6 +104,8 @@ public class RobotContainer {
    * The container for the robot.  Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() {
+    //lots off testing commands
+    /*
     shooterTab.add("Set Zero", new StorageShoot(shooter, 0));
     shooterTab.add("Set One", new StorageShoot(shooter, 5000));
 
@@ -110,7 +121,6 @@ public class RobotContainer {
     shooterTab.add("move lift offNotExtra", new pneumaticClimb(lift,"offNotExtra"));
     shooterTab.add("move lift off", new pneumaticClimb(lift, "off"));
 
-
     shooterTab.add("run winch Joy", new RunCommand(()->lift.winchControl(topPortJoystick.getRawAxis(ControlConstants.kJOYSTICK_Y)), lift));
 
     shooterTab.add("90 degree turn", new turnToLocation(driveTrain, 90));
@@ -119,7 +129,6 @@ public class RobotContainer {
     shooterTab.add("move ballstop down", new pneumaticBallStop(shooter, "up"));
 
     shooterTab.add("backtrack", new RunCommand(()-> ballStorage.backTrack() , ballStorage));
-
     shooterTab.add("reset ball", new InstantCommand(()->ballStorage.resetBallCounter(), ballStorage));
     shooterTab.add("move bag", new RunCommand(()->ballStorage.runMotor(.35), ballStorage));
 
@@ -130,15 +139,23 @@ public class RobotContainer {
 
     shooterTab.add("KeyLimePi On", new InstantCommand(() -> NetworkTableInstance.getDefault().getTable("limelight").getEntry("ledMode").setNumber(0)));
     shooterTab.add("KeyLimePi Off", new InstantCommand(() -> NetworkTableInstance.getDefault().getTable("limelight").getEntry("ledMode").setNumber(1)));
-
     shooterTab.add("limeturn", new limeTurn(driveTrain));
-    //
+    //*/
     
-    /*driveTrain.setDefaultCommand(new drive(driveTrain, 
+    driveTrain.setDefaultCommand(new drive(driveTrain, 
                                            bottomPortJoystick));
     
-    //*/
-    //ballStorage.setDefaultCommand(new BallShift(ballStorage));
+    //
+    ballStorage.setDefaultCommand(new BallShift(ballStorage));
+
+
+    //math was to get up to equal up & down to equal down
+    vision.setDefaultCommand(new RunCommand(
+                              ()->vision.setPosition(
+                              (-bottomPortJoystick.getRawAxis(ControlConstants.kJOYSTICK_SLIDER)+1)/2
+                                )
+                              )
+                            );
 
     // Configure the button bindings*/
     configureButtonBindings();
@@ -151,13 +168,23 @@ public class RobotContainer {
    * {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-      intakeButton.whenHeld(new Shoot(ballStorage, shooter, 2300))
+      shootButton.whenHeld(new Shoot(ballStorage, shooter, 2300))
       .whenReleased(new StorageShoot(shooter, 0))
       .whenReleased(new pneumaticBallStop(shooter, "up"));
-      intakeButton.whenInactive(new InstantCommand(()->ballStorage.resetBallCounter()));
+      shootButton.whenInactive(new InstantCommand(()->ballStorage.resetBallCounter()));
       
-      counterResetButton.whenActive(new MoveIntakeDOWN(intake, shooterLift));
-      counterResetButton.whenReleased(new MoveIntakeUP(intake));
+      intakeButton.whenActive(new MoveIntakeDOWN(intake, shooterLift));
+      intakeButton.whenReleased(new MoveIntakeUP(intake));
+
+      bagForceButton.whenPressed(new ForceShift(ballStorage));
+
+      magazineZeroButton.whenPressed(new pneumaticShooter(shooterLift, 0));
+      magazineOneButton.whenPressed(new pneumaticShooter(shooterLift, 1));
+      magazineTwoButton.whenPressed(new pneumaticShooter(shooterLift, 2));
+      magazineThreeButton.whenPressed(new pneumaticShooter(shooterLift, 3));
+
+      intakeUp.whenPressed(new pneumaticIntake(intake, "up"));
+      intakeDown.whenPressed(new pneumaticIntake(intake, "soft"));
     }
 
 

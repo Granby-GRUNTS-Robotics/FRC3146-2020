@@ -9,6 +9,7 @@ package frc.robot.commands.shooter;
 
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import frc.robot.commands.intake.ForceShift;
 import frc.robot.subsystems.BallStorage;
 import frc.robot.subsystems.Shooter;
 
@@ -27,13 +28,7 @@ public class Shoot extends SequentialCommandGroup {
       new InstantCommand(()->ballStorage.backTrack(), ballStorage),
       new pneumaticBallStop(shooter, "down"),
       new StorageShoot(shooter, pos),
-      new InstantCommand(()->ballStorage.resetBallCounter(), ballStorage),
-      new InstantCommand(()->ballStorage.runMotor(0.5), ballStorage),
-      new InstantCommand(()->ballStorage.resetEncoder(), ballStorage)
-
-
-    
-      
+      new ForceShift(ballStorage, 7)
       );
   }
 }

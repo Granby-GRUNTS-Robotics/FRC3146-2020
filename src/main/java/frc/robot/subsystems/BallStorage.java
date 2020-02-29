@@ -54,10 +54,13 @@ public class BallStorage extends SubsystemBase {
   public double obtainEncoderPosition() {
     return bagController.getSelectedSensorPosition();
   }
+
+  //sets the target position to rotations * 4096 (quadrature counts/rot)
   public void bagMotorSetPosition(double posit) {
     bagController.set(ControlMode.Position, posit*4096);
   }
 
+  //sets encoder position to zero (hypothetically)
   public void resetEncoder(){
     bagController.setSelectedSensorPosition(0);
   }
@@ -88,7 +91,6 @@ public class BallStorage extends SubsystemBase {
   public void backTrack(){
     resetEncoder();
     bagMotorSetPosition(-1);
-
   }
 
   public int getState(){
@@ -97,16 +99,17 @@ public class BallStorage extends SubsystemBase {
   
   public void moveSpace(){
     position++;
-    bagMotorSetPosition(3*position);
+    bagMotorSetPosition(IntakeConstants.kBALL_STORAGE_DISTANCE*position);
   }
 
-  public boolean isShifted(){
+  //useless
+  /*public boolean isShifted(){
     return Math.abs(bagController.getErrorDerivative())<1000;
-  }
+  }*/
 
+  //good override function
   public void runMotor(double percent){
     bagController.set(ControlMode.PercentOutput, percent);
-    if (percent>0) System.out.println("ball");
   }
 
   public void resetBallCounter(){

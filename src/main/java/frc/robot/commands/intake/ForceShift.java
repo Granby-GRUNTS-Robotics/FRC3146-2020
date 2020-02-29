@@ -15,7 +15,17 @@ public class ForceShift extends CommandBase {
    * Creates a new ForceShift.
    */
   BallStorage ballStorage;
+  int distance;
+
+  public ForceShift(BallStorage ballStorage, int distance) {
+    this.distance = distance;
+    this.ballStorage = ballStorage;
+    // Use addRequirements() here to declare subsystem dependencies.
+    addRequirements(ballStorage);
+  }
+
   public ForceShift(BallStorage ballStorage) {
+    int distance = 1;
     this.ballStorage = ballStorage;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(ballStorage);
@@ -24,7 +34,11 @@ public class ForceShift extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    ballStorage.resetBallCounter();
+    ballStorage.resetEncoder();
+    for (int i = 0; i <= distance; i++){
     ballStorage.moveSpace();
+    }
   }
 
   // Called every time the scheduler runs while the command is scheduled.
