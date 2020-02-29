@@ -7,21 +7,24 @@
 
 package frc.robot.subsystems;
 
+import static frc.robot.Constants.PneumaticConstants.kOFF;
+import static frc.robot.Constants.PneumaticConstants.kON;
+
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 
+import edu.wpi.first.wpilibj.AnalogInput;
+import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants.LiftConstants;
 import frc.robot.Constants.PneumaticConstants;
-import static frc.robot.Constants.PneumaticConstants.kON;
-import static frc.robot.Constants.PneumaticConstants.kOFF;
 
 public class LiftMechanism extends SubsystemBase {
   /**
    * Creates a new LiftMechanism.
    */
-
+  private final AnalogInput winchEncoder = new AnalogInput(0);
+  private final Servo ratchetServo = new Servo(1);
   private final VictorSPX mainLiftSpx = new VictorSPX(8);
   private final VictorSPX slaveLiftSpx = new VictorSPX(9);
   private final Solenoid upSolenoid = new Solenoid(PneumaticConstants.kPCM_Port, PneumaticConstants.kFIRST_CLIMB_PORT);
@@ -31,11 +34,22 @@ public class LiftMechanism extends SubsystemBase {
 
   public LiftMechanism() {
     slaveLiftSpx.follow(mainLiftSpx);
-    mainLiftSpx.configVoltageCompSaturation(LiftConstants.voltageMax);
   }
 
   public void winchControl(double speed) {
     mainLiftSpx.set(ControlMode.PercentOutput, speed);
+  }
+
+  public void setServo(String ratcheting){
+    if (ratcheting=="yes"){
+      ratchetServo.set(170);
+    }else if (ratcheting == "no"){
+      ratchetServo.set(0);
+    }
+  }
+
+  public double getLiftEncoder(){
+    return (((double)winchEncoder.getValue())-4)/400;
   }
 
   public void up(){
@@ -70,6 +84,7 @@ public class LiftMechanism extends SubsystemBase {
 
   @Override
   public void periodic() {
+    System.out.println(getLiftEncoder());
     // This method will be called once per scheduler run
   }
 }
