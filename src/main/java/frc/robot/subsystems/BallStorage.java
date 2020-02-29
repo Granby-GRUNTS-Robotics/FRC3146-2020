@@ -13,7 +13,6 @@ import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.revrobotics.Rev2mDistanceSensor;
 import com.revrobotics.Rev2mDistanceSensor.Port;
 
-import java.util.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.IntakeConstants;
 
@@ -25,11 +24,8 @@ public class BallStorage extends SubsystemBase {
   // IntakeConstants.kTHROUGH_BORE_PORT[1]);
   Rev2mDistanceSensor ballCheck = new Rev2mDistanceSensor(Port.kOnboard, Rev2mDistanceSensor.Unit.kMillimeters,
       Rev2mDistanceSensor.RangeProfile.kDefault);
-  private String isCaptured = "AAA";
-  private String dwightMood = "ee";
   private int ballCount = 0;
   private int state_test = 0;
-  private static final Timer timer = new Timer();
                                       
   double position = 0;
   /**
@@ -58,8 +54,8 @@ public class BallStorage extends SubsystemBase {
   public double obtainEncoderPosition() {
     return bagController.getSelectedSensorPosition();
   }
-  public void bagMotorSetPosition(double position) {
-    bagController.set(ControlMode.Position, position*4096);
+  public void bagMotorSetPosition(double posit) {
+    bagController.set(ControlMode.Position, posit*4096);
   }
 
   public void resetEncoder(){
@@ -70,7 +66,7 @@ public class BallStorage extends SubsystemBase {
   public void periodic() {
     //System.out.println(getBallCount() +" "+ obtainEncoderPosition());
     // This method will be called once per scheduler run
-    System.out.println("sensor: "+ getDistanceSensor()+", ball count: " + getBallCount());
+    //System.out.println("sensor: "+ getDistanceSensor()+", ball count: " + getBallCount());
  }
 
   //once it gets a ball, increase the counter. Once the ball is gone, start reading again
@@ -101,7 +97,7 @@ public class BallStorage extends SubsystemBase {
   
   public void moveSpace(){
     position++;
-    bagMotorSetPosition(2.5*position);
+    bagMotorSetPosition(3*position);
   }
 
   public boolean isShifted(){
