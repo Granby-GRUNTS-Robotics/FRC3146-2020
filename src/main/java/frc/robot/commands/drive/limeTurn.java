@@ -7,23 +7,20 @@
 
 package frc.robot.commands.drive;
 
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.Constants.DriveTrainConstants;
 import frc.robot.subsystems.DriveTrain;
 
-public class turnToLocation extends CommandBase {
+public class limeTurn extends CommandBase {
   /**
    * Creates a new turnToLocation.
    */
   private DriveTrain driveTrain;
   private double degrees;
   private double distance;
-  private double initial;
-  private boolean isFinished;
 
-  public turnToLocation(DriveTrain driveTrain, double degrees) {
+  public limeTurn(DriveTrain driveTrain) {
     this.driveTrain = driveTrain;
-    this.degrees = degrees;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(driveTrain);
   }
@@ -31,15 +28,17 @@ public class turnToLocation extends CommandBase {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    initial = driveTrain.getFusedHeading();
-    degrees += initial;
+  }
+
+  public double getLimelightInDegrees(double limelight){
+    return limelight;
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    distance = driveTrain.getTurnInEncoderDistance(degrees - driveTrain.getFusedHeading());
-    System.out.println(distance);
+    degrees = NetworkTableInstance.getDefault().getTable("limelight").getEntry("tx").getDouble(0);
+    distance = driveTrain.getTurnInEncoderDistance(getLimelightInDegrees(degrees));
     driveTrain.setReference(-distance, distance);
   }
 
@@ -51,7 +50,6 @@ public class turnToLocation extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    isFinished = Math.abs((initial+degrees) - driveTrain.getFusedHeading()) < DriveTrainConstants.kDEGREE_SPECIFICITY;
-    return isFinished;
+    return false;
   }
 }
