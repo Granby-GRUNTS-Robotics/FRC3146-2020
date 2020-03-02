@@ -27,7 +27,6 @@ import frc.robot.commands.climb.ratchet;
 import frc.robot.commands.drive.drive;
 import frc.robot.commands.drive.driveToLocation;
 import frc.robot.commands.drive.limeTurn;
-import frc.robot.commands.drive.xboxDrive;
 import frc.robot.commands.intake.BallShift;
 import frc.robot.commands.intake.ForceShift;
 import frc.robot.commands.intake.MoveIntakeDOWN;
@@ -182,7 +181,7 @@ public class RobotContainer {
       intakeButton.whenActive(new MoveIntakeDOWN(intake, shooterLift));
       intakeButton.whenReleased(new MoveIntakeUP(intake));
 
-      limeLightButton.whenHeld(new limeTurn(driveTrain, buttonJoystick)).whenPressed(new InstantCommand(() -> NetworkTableInstance.getDefault().getTable("limelight").getEntry("ledMode").setNumber(0)))
+      limeLightButton.whenHeld(new limeTurn(driveTrain, bottomPortJoystick)).whenPressed(new InstantCommand(() -> NetworkTableInstance.getDefault().getTable("limelight").getEntry("ledMode").setNumber(0)))
       .whenInactive(new InstantCommand(() -> NetworkTableInstance.getDefault().getTable("limelight").getEntry("ledMode").setNumber(1)));
 
       bagForceButton.whenPressed(new ForceShift(ballStorage));
@@ -195,7 +194,7 @@ public class RobotContainer {
       intakeUp.whenPressed(new pneumaticIntake(intake, "up"));
       intakeDown.whenPressed(new pneumaticIntake(intake, "soft"));
 
-      climb.and(climbB).whenActive(new fullClimb(intake, shooterLift, lift, buttonJoystick));
+      ((Button) climb.and(climbB)).whenHeld(new fullClimb(intake, shooterLift, lift, buttonJoystick));
     }
 
 

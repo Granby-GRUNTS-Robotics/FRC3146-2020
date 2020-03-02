@@ -21,7 +21,6 @@ public class OtherMethods {
     public static double getValueWithDeadband(double rawAxis){
         double inbetween;
         inbetween = ((Math.abs(rawAxis) < ControlConstants.kDEADZONE) ? (0) : (rawAxis)) * (1 - ControlConstants.kDEADZONE);
-        System.out.println(inbetween);
         return inbetween;
     } 
 }
