@@ -42,6 +42,6 @@ public class StorageShoot extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return (Math.abs(shooter.getSpeed()-speed) < 10);
+    return (Math.abs(shooter.getSpeed()-speed) < 240);
   }
 }

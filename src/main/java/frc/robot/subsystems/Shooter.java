@@ -47,7 +47,8 @@ public class Shooter extends SubsystemBase {
     rightShooterMotor.setInverted(false);
     leftShooterMotor.setInverted(false);
     rightShooterMotor.follow(leftShooterMotor, true); 
-    
+    leftShooterMotor.getPIDController().setP(0, 0);
+    leftShooterMotor.getPIDController().setD(0, 0);
     rightEncoder.setPosition(0.0);
     leftEncoder.setPosition(0.0);
   }
@@ -84,6 +85,7 @@ public class Shooter extends SubsystemBase {
 
   @Override
   public void periodic() {
+    System.out.println(getSpeed());
   }
 
 }

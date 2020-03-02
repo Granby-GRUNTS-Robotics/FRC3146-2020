@@ -20,6 +20,6 @@ public class MoveIntakeUP extends SequentialCommandGroup {
   public MoveIntakeUP(Intake intake) {
     // Add your commands in the super() call, e.g.
     // super(new FooCommand(), new BarCommand());
-    super(new intakeSet(intake, 0));
+    super(new intakeSet(intake,  0));
   }
 }
