@@ -124,7 +124,7 @@ public final class Constants {
     
         public static final double kTWIST_MULTIPLIER = 20;
         public static final double kTHROTTLE_MULTIPLIER = 30;
-        public static final double kDEADZONE = 0.2;
+        public static final double kDEADZONE = 0.4;
 
     }
 

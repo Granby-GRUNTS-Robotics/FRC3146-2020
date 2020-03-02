@@ -90,7 +90,6 @@ public class BallStorage extends SubsystemBase {
   @Override
   public void periodic() {
     Shuffleboard.update();
-    //System.out.println(getBallCount() +" "+ obtainEncoderPosition());
     // This method will be called once per scheduler run
    }
 
