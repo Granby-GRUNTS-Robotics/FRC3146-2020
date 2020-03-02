@@ -112,7 +112,7 @@ public class DriveTrain extends SubsystemBase {
 
   public double getTurnInEncoderDistance(double degrees){
     //simple trig w/ wheel to wheel as the "diameter"
-    return getInEncoderDistance(degrees/360*24*Math.PI);
+    return getInEncoderDistance(degrees/360*21*Math.PI);
   }
 
   //used for pretty much everything

@@ -11,6 +11,7 @@ import static frc.robot.Constants.ControlConstants.kTHROTTLE_MULTIPLIER;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.OtherMethods;
 import frc.robot.Constants.ControlConstants;
 import frc.robot.subsystems.DriveTrain;
 
@@ -55,8 +56,8 @@ public class tankDrive extends CommandBase {
     right = rjoy.getRawAxis(ControlConstants.kJOYSTICK_TWIST);//
 
     //deadzone code w/ simplified if-else statement
-    left = ((Math.abs(left) < ControlConstants.kDEADZONE) ? (0) : (left));
-    right = ((Math.abs(right)<ControlConstants.kDEADZONE) ? (0) : (right));
+    left = OtherMethods.getValueWithDeadband(left);
+    right = OtherMethods.getValueWithDeadband(right);
     
     //sets the target speed based on axes
     m_DriveTrain.setReference(left*kTHROTTLE_MULTIPLIER, 

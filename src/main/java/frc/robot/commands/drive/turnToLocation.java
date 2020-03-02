@@ -41,7 +41,7 @@ public class turnToLocation extends CommandBase {
   public void execute() {
     System.out.println(driveTrain.getFusedHeading()+ ", " + degrees);
     //distance to target changes each time, we will see if this works or not
-    distance = driveTrain.getTurnInEncoderDistance(degrees - driveTrain.getFusedHeading());
+    distance = driveTrain.getTurnInEncoderDistance((degrees - driveTrain.getFusedHeading())*1);
     //sets the actual reference point
     driveTrain.setReference(-distance, distance);
     //for troubleshooting

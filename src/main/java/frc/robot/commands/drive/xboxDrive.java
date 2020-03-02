@@ -9,6 +9,7 @@ package frc.robot.commands.drive;
 
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.OtherMethods;
 import frc.robot.Constants.ControlConstants;
 import frc.robot.subsystems.DriveTrain;
 import static frc.robot.Constants.ControlConstants.kTHROTTLE_MULTIPLIER;
@@ -51,8 +52,8 @@ public class xboxDrive extends CommandBase {
     m_speed = -m_joy.getRawAxis(ControlConstants.kXBOX_RT)+m_joy.getRawAxis(ControlConstants.kXBOX_LT);
     m_turn = m_joy.getRawAxis(ControlConstants.kXBOX_X);//
     //copy and pasted from "drive.java"
-    m_speed = ((Math.abs(m_speed) < ControlConstants.kDEADZONE) ? (0) : (m_speed));
-    m_turn = ((Math.abs(m_turn)<ControlConstants.kDEADZONE) ? (0) : (m_turn));
+    m_speed = OtherMethods.getValueWithDeadband(m_speed);
+    m_turn = OtherMethods.getValueWithDeadband(m_turn);
     //sets reference after deadzone has been applied
     m_DriveTrain.setReference(m_speed*kTHROTTLE_MULTIPLIER-m_turn*kTWIST_MULTIPLIER, 
                               m_speed*kTHROTTLE_MULTIPLIER+m_turn*kTWIST_MULTIPLIER);
