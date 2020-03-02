@@ -39,6 +39,7 @@ public class turnToLocation extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    System.out.println(driveTrain.getFusedHeading()+ ", " + degrees);
     //distance to target changes each time, we will see if this works or not
     distance = driveTrain.getTurnInEncoderDistance(degrees - driveTrain.getFusedHeading());
     //sets the actual reference point

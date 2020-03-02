@@ -8,7 +8,9 @@
 package frc.robot.commands.drive;
 
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Constants.ControlConstants;
 import frc.robot.subsystems.DriveTrain;
 
 public class limeTurn extends CommandBase {
@@ -18,8 +20,11 @@ public class limeTurn extends CommandBase {
   private DriveTrain driveTrain;
   private double degrees;
   private double distance;
+  private double m_speed;
+  private Joystick joy;
 
-  public limeTurn(DriveTrain driveTrain) {
+  public limeTurn(DriveTrain driveTrain, Joystick joy) {
+    this.joy = joy;
     this.driveTrain = driveTrain;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(driveTrain);
@@ -37,11 +42,18 @@ public class limeTurn extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    m_speed = joy.getRawAxis(ControlConstants.kJOYSTICK_Y);
+
+    //deadzone code w/ simplified if-else statement
+    m_speed = ((Math.abs(m_speed) < ControlConstants.kDEADZONE) ? (0) : (m_speed*30));
+  
+
     //gets limelight turn ("tx") value from Network Tables
     degrees = NetworkTableInstance.getDefault().getTable("limelight").getEntry("tx").getDouble(0);
     //changes the degree turn amount into correct distance for the motors to run
-    distance = driveTrain.getTurnInEncoderDistance(getLimelightInDegrees(degrees));
-    driveTrain.setReference(-distance, distance);
+    distance = driveTrain.getTurnInEncoderDistance(degrees);
+    distance = (Math.abs(distance) < 0.5) ? 0 : distance*3;
+    driveTrain.setReference(+distance+m_speed, -distance+m_speed);
   }
 
   // Called once the command ends or is interrupted.

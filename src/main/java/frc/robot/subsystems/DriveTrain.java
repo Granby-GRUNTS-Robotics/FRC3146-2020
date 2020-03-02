@@ -75,6 +75,10 @@ public class DriveTrain extends SubsystemBase {
     rightDriveEncoder.setPosition(0.0);
     rightSlaveEncoder.setPosition(0.0);
 
+    rightDriveMotor.setSmartCurrentLimit(40);
+    leftDriveMotor.setSmartCurrentLimit(40);
+    rightSlaveMotor.setSmartCurrentLimit(40);
+    leftSlaveMotor.setSmartCurrentLimit(40);
   }
 /* A BUNCH OF COMMANDS ARE DEFINED HERE FOR USE IN OTHER PARTS OF THE CODE*/
 
