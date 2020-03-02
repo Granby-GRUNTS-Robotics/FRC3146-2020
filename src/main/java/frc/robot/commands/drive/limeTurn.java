@@ -7,9 +7,9 @@
 
 package frc.robot.commands.drive;
 
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.OtherMethods;
 import frc.robot.Constants.ControlConstants;
 import frc.robot.subsystems.DriveTrain;
 
@@ -35,8 +35,6 @@ public class limeTurn extends CommandBase {
   public void initialize() {
   }
 
-
-  //incase we want to do any further calculations
   public double getLimelightInDegrees(double limelight){
     return limelight;
   }
@@ -44,19 +42,16 @@ public class limeTurn extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    //still goes back and forth
     m_speed = joy.getRawAxis(ControlConstants.kJOYSTICK_Y);
 
     //deadzone code w/ simplified if-else statement
-    m_speed = OtherMethods.getValueWithDeadband(m_speed) * ControlConstants.kTHROTTLE_MULTIPLIER;
+    m_speed = ((Math.abs(m_speed) < ControlConstants.kDEADZONE) ? (0) : (m_speed*30));
   
 
     //gets limelight turn ("tx") value from Network Tables
-    degrees = OtherMethods.getLimelighttx();
-
+    degrees = NetworkTableInstance.getDefault().getTable("limelight").getEntry("tx").getDouble(0);
     //changes the degree turn amount into correct distance for the motors to run
     distance = driveTrain.getTurnInEncoderDistance(degrees);
-    //sets deadband
     distance = (Math.abs(distance) < 0.5) ? 0 : distance*3;
     driveTrain.setReference(+distance+m_speed, -distance+m_speed);
   }

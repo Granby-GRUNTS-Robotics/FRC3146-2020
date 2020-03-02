@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants.IntakeConstants;
+import frc.robot.commands.intake.ForceShift;
 import frc.robot.commands.intake.backSpace;
 import frc.robot.subsystems.BallStorage;
 import frc.robot.subsystems.Shooter;

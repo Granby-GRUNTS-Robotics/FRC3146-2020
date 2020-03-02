@@ -7,6 +7,11 @@
 
 package frc.robot;
 
+import org.opencv.videoio.VideoCapture;
+
+import edu.wpi.cscore.CameraServerJNI;
+import edu.wpi.cscore.VideoSource;
+import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.GenericHID;
@@ -27,6 +32,7 @@ import frc.robot.commands.climb.ratchet;
 import frc.robot.commands.drive.drive;
 import frc.robot.commands.drive.driveToLocation;
 import frc.robot.commands.drive.limeTurn;
+import frc.robot.commands.drive.turnToLocation;
 import frc.robot.commands.intake.BallShift;
 import frc.robot.commands.intake.ForceShift;
 import frc.robot.commands.intake.MoveIntakeDOWN;
@@ -90,10 +96,11 @@ public class RobotContainer {
   private final Button intakeUp = new JoystickButton(buttonJoystick, 5);
   private final Button intakeDown = new JoystickButton(buttonJoystick, 6);
   private final Button bagForceButton = new JoystickButton(buttonJoystick, 3);
-  private final Button intakeEjectButton = new JoystickButton(buttonJoystick, 4);
+  private final Button bagEjectButton = new JoystickButton(buttonJoystick, 4);
   private final Button limeLightButton = new JoystickButton(bottomPortJoystick, 1);
 
   private final Button climb = new JoystickButton(buttonJoystick, 9);
+  private final Button climbA = new JoystickButton(buttonJoystick, 9);
   private final Button climbB = new JoystickButton(buttonJoystick, 11);
   //*/
 
@@ -185,7 +192,7 @@ public class RobotContainer {
       .whenInactive(new InstantCommand(() -> NetworkTableInstance.getDefault().getTable("limelight").getEntry("ledMode").setNumber(1)));
 
       bagForceButton.whenPressed(new ForceShift(ballStorage));
-      intakeEjectButton.whenPressed(new intakeSet(intake, -0.5)).whenReleased(new intakeSet(intake, 0));
+      bagEjectButton.whenPressed(new intakeSet(intake, -0.5)).whenReleased(new intakeSet(intake, 0));
 
       magazineZeroButton.whenPressed(new pneumaticShooter(shooterLift, 0));
       magazineOneButton.whenPressed(new pneumaticShooter(shooterLift, 1));

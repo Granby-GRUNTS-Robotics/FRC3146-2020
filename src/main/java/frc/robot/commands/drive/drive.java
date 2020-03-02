@@ -7,7 +7,6 @@
 
 package frc.robot.commands.drive;
 
-import frc.robot.OtherMethods;
 import frc.robot.Constants.ControlConstants;
 import frc.robot.subsystems.DriveTrain;
 import edu.wpi.first.wpilibj.Joystick;
@@ -53,8 +52,8 @@ public class drive extends CommandBase {
     m_turn = m_joy.getRawAxis(ControlConstants.kJOYSTICK_TWIST);//
 
     //deadzone code w/ simplified if-else statement
-    m_speed = OtherMethods.getValueWithDeadband(m_speed);
-    m_turn = OtherMethods.getValueWithDeadband(m_turn);
+    m_speed = ((Math.abs(m_speed) < ControlConstants.kDEADZONE) ? (0) : (m_speed));
+    m_turn = ((Math.abs(m_turn)<ControlConstants.kDEADZONE) ? (0) : (m_turn));
     
     //sets the target speed based on axes
     m_DriveTrain.setReference(m_speed*kTHROTTLE_MULTIPLIER-m_turn*kTWIST_MULTIPLIER, 
