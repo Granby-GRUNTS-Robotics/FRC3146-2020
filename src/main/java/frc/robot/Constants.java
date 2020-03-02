@@ -29,7 +29,7 @@ public final class Constants {
         public static final int kRIGHT_SLAVE_MOTOR_PORT = 3;
         public static final int kLEFT_SLAVE_MOTOR_PORT = 4;
         public static final double kSPECIFICITY = 0.1;
-        public static final double kDEGREE_SPECIFICITY = 2;
+        public static final double kDEGREE_SPECIFICITY = 0.1;
 
         //Used for velocity PID control of the drive base. Must reconfigure once full weight is on the drive base
         public final static double kP = 0.029;
@@ -44,9 +44,10 @@ public final class Constants {
     public static final class ShooterConstants {
         public static final int kLEFT_SHOOTER_MOTOR_PORT = 11;
         public static final int kRIGHT_SHOOTER_MOTOR_PORT = 10;
-        public static final double kSHOOTER_NORMAL_SPEED = 0;
+        public static final double kSHOOTER_NORMAL_SPEED = 2480;
         public static final boolean kSON = false;
         public static final boolean kSOFF = true;
+        
 
         //shooter velocity pid constants
         public static final double kP = 0.0;
@@ -62,9 +63,12 @@ public final class Constants {
         public static final int kINTAKE_MOTOR_PORT = 6;
         public static final double kINTAKE_NORMAL_SPEED = 0;
         public static final int kBAG_CONTROLLER_PORT = 7;
-        public static final double kBALL_STORAGE_DISTANCE = 3;
+        public static final double kBALL_STORAGE_DISTANCE = 3;//
+        public static final double kSHOOTER_BAG_SPEED = 0.5;//
         public static final int[] kTHROUGH_BORE_PORT = {0,0};
-        public static final int kBALL_DISTANCE_SETPOINT = 160;
+        public static final int kBALL_DISTANCE_SETPOINT = 100;
+        public static final int kBALL_TESTS = 10;
+        public static final int kBALL_TRUES = 5;
     }
 
     /**
@@ -120,13 +124,14 @@ public final class Constants {
     
         public static final double kTWIST_MULTIPLIER = 20;
         public static final double kTHROTTLE_MULTIPLIER = 30;
-        public static final double kDEADZONE = 0.05;
+        public static final double kDEADZONE = 0.2;
 
     }
 
     public static final class LiftConstants {
         public static final int[] kLIFT_MOTOR_PORTS = {8,9};
         public static final int voltageMax = 40;
+        public static final double kUP_MAX_DISTANCE = 5.0;
     }
 
 

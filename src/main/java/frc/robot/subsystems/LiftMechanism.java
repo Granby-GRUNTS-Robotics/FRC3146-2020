@@ -23,8 +23,8 @@ public class LiftMechanism extends SubsystemBase {
   /**
    * Creates a new LiftMechanism.
    */
-  private final AnalogInput winchEncoder = new AnalogInput(0);
-  private final Servo ratchetServo = new Servo(1);
+  private final AnalogInput winchEncoder = new AnalogInput(3);
+  private final Servo ratchetServo = new Servo(9);
   private final VictorSPX mainLiftSpx = new VictorSPX(8);
   private final VictorSPX slaveLiftSpx = new VictorSPX(9);
   private final Solenoid upSolenoid = new Solenoid(PneumaticConstants.kPCM_Port, PneumaticConstants.kFIRST_CLIMB_PORT);
@@ -34,16 +34,17 @@ public class LiftMechanism extends SubsystemBase {
 
   public LiftMechanism() {
     slaveLiftSpx.follow(mainLiftSpx);
+    setServo("no");  
   }
 
-  public void winchControl(double speed) {
+  public void setWinch(double speed) {
     mainLiftSpx.set(ControlMode.PercentOutput, speed);
   }
 
   public void setServo(String ratcheting){
-    if (ratcheting=="yes"){
-      ratchetServo.set(170);
-    }else if (ratcheting == "no"){
+    if (ratcheting=="no"){
+      ratchetServo.set(180);
+    }else if (ratcheting == "yes"){
       ratchetServo.set(0);
     }
   }
@@ -84,7 +85,7 @@ public class LiftMechanism extends SubsystemBase {
 
   @Override
   public void periodic() {
-    System.out.println(getLiftEncoder());
+    //System.out.println(getLiftEncoder());
     // This method will be called once per scheduler run
   }
 }
