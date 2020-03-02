@@ -10,24 +10,15 @@ package frc.robot.commands.intake;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.BallStorage;
 
-public class ForceShift extends CommandBase {
+public class backSpace extends CommandBase {
   /**
    * Creates a new ForceShift.
    */
   BallStorage ballStorage;
   int distance;
-  int i = 0; 
 
 
-  public ForceShift(BallStorage ballStorage, int distance) {
-    this.distance = distance;
-    this.ballStorage = ballStorage;
-    // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(ballStorage);
-  }
-
-  public ForceShift(BallStorage ballStorage) {
-    distance = 1;
+  public backSpace(BallStorage ballStorage) {
     this.ballStorage = ballStorage;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(ballStorage);
@@ -38,16 +29,12 @@ public class ForceShift extends CommandBase {
   public void initialize() {
     ballStorage.resetBallCounter();
     ballStorage.resetEncoder();
+    ballStorage.backTrack();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if(i <= distance) {
-      i++;
-      ballStorage.moveSpace();
-      System.out.println(i);
-      }
   }
 
   // Called once the command ends or is interrupted.
@@ -55,7 +42,6 @@ public class ForceShift extends CommandBase {
   public void end(boolean interrupted) {
     ballStorage.resetBallCounter();
     ballStorage.resetEncoder();
-    i = 0;
   }
 
   // Returns true when the command should end.

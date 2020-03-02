@@ -7,12 +7,16 @@
 
 package frc.robot.subsystems;
 
+import java.util.LinkedList;
+import java.util.Queue;
+
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.revrobotics.Rev2mDistanceSensor;
 import com.revrobotics.Rev2mDistanceSensor.Port;
 
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.IntakeConstants;
 
@@ -26,6 +30,8 @@ public class BallStorage extends SubsystemBase {
       Rev2mDistanceSensor.RangeProfile.kDefault);
   private int ballCount = 0;
   private int state_test = 0;
+
+  private Queue<Boolean> ballCheckList = new LinkedList<Boolean>();
                                       
   double position = 0;
   /**
@@ -42,13 +48,29 @@ public class BallStorage extends SubsystemBase {
     return getDistanceSensor() < IntakeConstants.kBALL_DISTANCE_SETPOINT && getDistanceSensor() != -1;
   }
 
+  public boolean definitelyHasBall(){
+    if (ballCheckList.size()< IntakeConstants.kBALL_TESTS){
+      ballCheckList.add(hasBall());
+    }else{
+      ballCheckList.remove();
+      ballCheckList.add(hasBall());
+    }
+    for (int i = 0; i<IntakeConstants.kBALL_TESTS; i++){
+      //yesses += (ballCheckList[i] == true) ? 0 : 1;
+    }
+    return true;
+  }
+
   public BallStorage() {
     ballCheck.setAutomaticMode(true);
     bagController.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder );
     bagController.configFactoryDefault();
     bagController.config_kP(0, 0.15);
     resetEncoder();
-    //Shuffleboard.getTab("John").add("Ball Count", getBallCount());
+    Shuffleboard.getTab("John").add("Ball Count", getBallCount());
+    Shuffleboard.getTab("John").add("Sensor", getDistanceSensor());
+    Shuffleboard.getTab("John").add("Distance Setpoint", IntakeConstants.kBALL_DISTANCE_SETPOINT);
+    Shuffleboard.getTab("John").add("Movement", IntakeConstants.kBALL_STORAGE_DISTANCE);
   }
 
   public double obtainEncoderPosition() {
@@ -67,10 +89,10 @@ public class BallStorage extends SubsystemBase {
 
   @Override
   public void periodic() {
+    Shuffleboard.update();
     //System.out.println(getBallCount() +" "+ obtainEncoderPosition());
     // This method will be called once per scheduler run
-    //System.out.println("sensor: "+ getDistanceSensor()+", ball count: " + getBallCount());
- }
+   }
 
   //once it gets a ball, increase the counter. Once the ball is gone, start reading again
   public void countBall() {
@@ -90,7 +112,8 @@ public class BallStorage extends SubsystemBase {
 
   public void backTrack(){
     resetEncoder();
-    bagMotorSetPosition(-1);
+    resetBallCounter();
+    bagMotorSetPosition(-2);
   }
 
   public int getState(){
@@ -102,10 +125,17 @@ public class BallStorage extends SubsystemBase {
     bagMotorSetPosition(IntakeConstants.kBALL_STORAGE_DISTANCE*position);
   }
 
+  public void moveFifth(){
+    resetBallCounter();
+    resetEncoder();
+    bagMotorSetPosition(IntakeConstants.kBALL_STORAGE_DISTANCE*position
+                       +IntakeConstants.kBALL_STORAGE_DISTANCE*0.1);
+  }
+
   //useless
-  /*public boolean isShifted(){
-    return Math.abs(bagController.getErrorDerivative())<1000;
-  }*/
+  public boolean isShifted(){
+    return Math.abs(position*4096 - obtainEncoderPosition())<60;
+  }
 
   //good override function
   public void runMotor(double percent){

@@ -8,10 +8,14 @@
 package frc.robot.commands.shooter;
 
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import frc.robot.Constants.IntakeConstants;
 import frc.robot.commands.intake.ForceShift;
+import frc.robot.commands.intake.backSpace;
 import frc.robot.subsystems.BallStorage;
 import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.ShooterLift;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
@@ -20,15 +24,16 @@ public class Shoot extends SequentialCommandGroup {
   /**
    * Creates a new Shoot.
    */
-  public Shoot(BallStorage ballStorage, Shooter shooter, double pos) {
+  public Shoot(BallStorage ballStorage, Shooter shooter, ShooterLift lift, double pos) {
     // Add your commands in the super() call, e.g.
     // super(new FooCommand(), new BarCommand());
     super(    
+      new pneumaticShooter(lift, 1),
       new InstantCommand(()->ballStorage.resetBallCounter(), ballStorage),
-      new InstantCommand(()->ballStorage.backTrack(), ballStorage),
+      new backSpace(ballStorage),
       new pneumaticBallStop(shooter, "down"),
       new StorageShoot(shooter, pos),
-      new ForceShift(ballStorage, 7)
+      new RunCommand(() -> ballStorage.runMotor(IntakeConstants.kSHOOTER_BAG_SPEED), ballStorage)
       );
   }
 }

@@ -30,10 +30,20 @@ public class BallShift extends CommandBase {
   @Override
   public void execute() {
     if(m_BallStorage.hasBall() && state == 0 && m_BallStorage.getBallCount() < 5){
-      m_BallStorage.moveSpace();
+      m_BallStorage.resetEncoder();
+      m_BallStorage.runMotor(0.35);
       state++;
+    }else if( m_BallStorage.getBallCount() == 5){
+      m_BallStorage.moveFifth();
+      state ++;
+
     }else if (!m_BallStorage.hasBall()){
       state = 0;
+      m_BallStorage.runMotor(0);
+    }
+    if (m_BallStorage.obtainEncoderPosition() > 3*4096){
+      m_BallStorage.resetEncoder();
+      m_BallStorage.backTrack();
     }
 
     m_BallStorage.countBall();
