@@ -201,7 +201,7 @@ public class RobotContainer {
       intakeUp.whenPressed(new pneumaticIntake(intake, "up"));
       intakeDown.whenPressed(new pneumaticIntake(intake, "soft"));
 
-      ((Button) climb.and(climbB)).whenHeld(new fullClimb(intake, shooterLift, lift, buttonJoystick));
+      climb.and(climbB).whenActive(new fullClimb(intake, shooterLift, lift, buttonJoystick));
     }
 
 
