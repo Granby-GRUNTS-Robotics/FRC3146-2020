@@ -34,8 +34,14 @@ public class pneumaticClimb extends CommandBase {
       case "up":
         lift.up();
         break;
+      case "upp":
+        lift.upp();
+        break;
       case "down":
         lift.down();
+        break;
+      case "offNotExtra":
+        lift.offNotExtra();
         break;
       case "off":
         lift.off();

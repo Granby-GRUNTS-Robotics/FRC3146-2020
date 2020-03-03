@@ -19,9 +19,11 @@ public class joystickWinch extends CommandBase {
    */
   LiftMechanism lift;
   Joystick joy;
-  public joystickWinch(LiftMechanism lift, Joystick joy) {
+  String direction;
+  public joystickWinch(LiftMechanism lift, Joystick joy, String direction) {
     this.lift = lift;
     this.joy = joy;
+    this.direction = direction;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(lift);
   }
@@ -34,7 +36,6 @@ public class joystickWinch extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    String direction = (joy.getRawAxis(ControlConstants.kJOYSTICK_Y) < 0) ? "down" : "up";
    switch (direction) {
      case "up":
     lift.setWinch(
@@ -45,9 +46,6 @@ public class joystickWinch extends CommandBase {
        break;
     case "down":
     lift.setWinch(joy.getRawAxis(ControlConstants.kJOYSTICK_Y));
-    if (lift.getLiftEncoder()<LiftConstants.kWINCH_DEFAULT){
-      lift.setServo("yes");
-    }
        break;
      default:
        break;
@@ -62,6 +60,6 @@ public class joystickWinch extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return joy.getRawButtonPressed(1);
+    return joy.getRawButtonPressed(7);
   }
 }

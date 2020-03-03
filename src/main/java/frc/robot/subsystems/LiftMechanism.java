@@ -29,6 +29,7 @@ public class LiftMechanism extends SubsystemBase {
   private final VictorSPX slaveLiftSpx = new VictorSPX(9);
   private final Solenoid upSolenoid = new Solenoid(PneumaticConstants.kPCM_Port, PneumaticConstants.kFIRST_CLIMB_PORT);
   private final Solenoid downSolenoid = new Solenoid(PneumaticConstants.kPCM_Port, PneumaticConstants.kSECOND_CLIMB_PORT);
+  private final Solenoid extraSolenoid = new Solenoid(PneumaticConstants.kPCM_Port, PneumaticConstants.kThird_CLIMB_PORT);
   
 
   public LiftMechanism() {
@@ -55,21 +56,36 @@ public class LiftMechanism extends SubsystemBase {
   public void up(){
     upSolenoid.set(kON);
     downSolenoid.set(kOFF);
+    extraSolenoid.set(kOFF);
+  }
+
+  public void upp(){
+    upSolenoid.set(kON);
+    extraSolenoid.set(kON);
+    downSolenoid.set(kOFF);
+  }
+
+  public void offNotExtra() {
+    upSolenoid.set(kOFF);
+    downSolenoid.set(kOFF);
+    extraSolenoid.set(kON);
   }
 
   public void off(){
     upSolenoid.set(kOFF);
     downSolenoid.set(kOFF);
+    extraSolenoid.set(kOFF);
   }
 
   public void down(){
     upSolenoid.set(kOFF);
+    extraSolenoid.set(kOFF);
     downSolenoid.set(kON);
   }
 
   @Override
   public void periodic() {
-    System.out.println(getLiftEncoder());
+    //System.out.println(getLiftEncoder());
     // This method will be called once per scheduler run
   }
 }

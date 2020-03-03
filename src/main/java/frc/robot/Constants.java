@@ -45,7 +45,6 @@ public final class Constants {
         public static final int kLEFT_SHOOTER_MOTOR_PORT = 11;
         public static final int kRIGHT_SHOOTER_MOTOR_PORT = 10;
         public static final double kSHOOTER_NORMAL_SPEED = 2480;
-        public static final double kAUTO_SPEED = 2480;
         public static final boolean kSON = false;
         public static final boolean kSOFF = true;
         
@@ -133,9 +132,6 @@ public final class Constants {
         public static final int[] kLIFT_MOTOR_PORTS = {8,9};
         public static final int voltageMax = 40;
         public static final double kUP_MAX_DISTANCE = 5.0;
-        public static final double kSTOP = .107;
-
-        public static final double kWINCH_DEFAULT = 0;
     }
 
 

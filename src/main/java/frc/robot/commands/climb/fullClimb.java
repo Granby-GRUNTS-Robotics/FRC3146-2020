@@ -30,7 +30,9 @@ public class fullClimb extends SequentialCommandGroup {
       new pneumaticShooter(shooterLift, 3),
       new pneumaticClimb(lift, "up"),
       new ratchet(lift, "no"),
-      new joystickWinch(lift, joy)
+      new joystickWinch(lift, joy, "up"),
+      new ratchet(lift, "yes"),
+      new joystickWinch(lift, joy, "down")
     );
   }
 }
