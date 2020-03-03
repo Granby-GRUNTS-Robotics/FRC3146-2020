@@ -16,6 +16,7 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.ControlType;
 
+import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.PneumaticConstants;
@@ -27,6 +28,8 @@ public class Shooter extends SubsystemBase {
    * didn't group them together because we might want to have them running at
    * different speeds
    */
+
+  private static final Servo cameraServo = new Servo(8);
 
   private static final Solenoid ballStop = new Solenoid(PneumaticConstants.kPCM_Port, PneumaticConstants.kSHOOTER_STOP_PORT);
 
@@ -75,6 +78,10 @@ public class Shooter extends SubsystemBase {
     shooterController.setReference(setpoint, ControlType.kVelocity, 0);
   }
 
+  public void setServo(double degrees){
+    cameraServo.set(degrees);
+  }
+
   public double getSpeed(){
     return leftEncoder.getVelocity();
   }
@@ -85,7 +92,6 @@ public class Shooter extends SubsystemBase {
 
   @Override
   public void periodic() {
-    System.out.println(getSpeed());
   }
 
 }

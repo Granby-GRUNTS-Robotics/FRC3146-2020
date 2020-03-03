@@ -43,7 +43,6 @@ import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.LiftMechanism;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.ShooterLift;
-import frc.robot.subsystems.Vision;
 
 /**
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -57,7 +56,6 @@ public class RobotContainer {
   
   // The robot's subsystems and commands are defined here...
 
-  public final Vision vision = new Vision();
   
   public final static DriveTrain driveTrain = new DriveTrain();
   
@@ -84,17 +82,17 @@ public class RobotContainer {
 
   private final Button intakeButton = new JoystickButton(buttonJoystick, 2);
   private final Button shootButton = new JoystickButton(buttonJoystick, 1);
-  private final Button magazineZeroButton = new JoystickButton(buttonJoystick, 12);
-  private final Button magazineOneButton = new JoystickButton(buttonJoystick, 10);
-  private final Button magazineThreeButton = new JoystickButton(buttonJoystick, 8);
+  private final Button magazineZeroButton = new JoystickButton(buttonJoystick, 11);
+  private final Button magazineOneButton = new JoystickButton(buttonJoystick, 9);
+  private final Button magazineThreeButton = new JoystickButton(buttonJoystick, 7);
   private final Button intakeUp = new JoystickButton(buttonJoystick, 5);
   private final Button intakeDown = new JoystickButton(buttonJoystick, 6);
   private final Button bagForceButton = new JoystickButton(buttonJoystick, 3);
   private final Button intakeEjectButton = new JoystickButton(buttonJoystick, 4);
   private final Button limeLightButton = new JoystickButton(bottomPortJoystick, 1);
 
-  private final Button climb = new JoystickButton(buttonJoystick, 9);
-  private final Button climbB = new JoystickButton(buttonJoystick, 11);
+  private final Button climb = new JoystickButton(buttonJoystick, 12);
+  private final Button climbB = new JoystickButton(buttonJoystick, 10);
   //*/
 
 
@@ -152,15 +150,6 @@ public class RobotContainer {
 
     //lift.setDefaultCommand(new ratchet(lift, "yes"));
 
-    //math was to get up to equal up & down to equal down
-    vision.setDefaultCommand(new RunCommand(
-                              ()->vision.setPosition(
-                              (-bottomPortJoystick.getRawAxis(ControlConstants.kJOYSTICK_SLIDER)+1)/2*.68
-                                ),
-                                vision
-                              )
-                            );
-
     // Configure the button bindings*/
     configureButtonBindings();
   }
@@ -172,8 +161,7 @@ public class RobotContainer {
    * {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-      shootButton.whenHeld(new Shoot(ballStorage, shooter, shooterLift, ShooterConstants.kSHOOTER_NORMAL_SPEED
-      ))
+      shootButton.whenHeld((climb.and(climbB).get()) ? new StorageShoot(shooter, 0): new Shoot(ballStorage, shooter, shooterLift, ShooterConstants.kSHOOTER_NORMAL_SPEED))
       .whenReleased(new StorageShoot(shooter, 0))
       .whenReleased(new pneumaticBallStop(shooter, "up"));
       shootButton.whenInactive(new InstantCommand(()->ballStorage.resetBallCounter()));
@@ -184,17 +172,16 @@ public class RobotContainer {
       limeLightButton.whenHeld(new limeTurn(driveTrain, bottomPortJoystick)).whenPressed(new InstantCommand(() -> NetworkTableInstance.getDefault().getTable("limelight").getEntry("ledMode").setNumber(0)))
       .whenInactive(new InstantCommand(() -> NetworkTableInstance.getDefault().getTable("limelight").getEntry("ledMode").setNumber(1)));
 
-      bagForceButton.whenPressed(new ForceShift(ballStorage));
-      intakeEjectButton.whenPressed(new intakeSet(intake, -0.5)).whenReleased(new intakeSet(intake, 0));
-
+      bagForceButton.whenPressed(new RunCommand(()-> ballStorage.runMotor(0.35) , ballStorage)).whenReleased(new InstantCommand(()-> ballStorage.runMotor(0) , ballStorage));
+      intakeEjectButton.whenPressed(new RunCommand(()-> ballStorage.runMotor(-0.35) , ballStorage)).whenReleased(new InstantCommand(()-> ballStorage.runMotor(0) , ballStorage));//.whenPressed(new intakeSet(intake, -0.5)).whenReleased(new intakeSet(intake, 0));
       magazineZeroButton.whenPressed(new pneumaticShooter(shooterLift, 0));
       magazineOneButton.whenPressed(new pneumaticShooter(shooterLift, 1));
       magazineThreeButton.whenPressed(new pneumaticShooter(shooterLift, 3));
 
       intakeUp.whenPressed(new pneumaticIntake(intake, "up"));
-      intakeDown.whenPressed(new pneumaticIntake(intake, "soft"));
+      intakeDown.whenPressed(new pneumaticIntake(intake, "down"));
 
-      climb.and(climbB).whenActive(new fullClimb(intake, shooterLift, lift, buttonJoystick));
+      climb.and(climbB).whileActiveOnce(new fullClimb(intake, shooterLift, lift, buttonJoystick));
     }
 
 

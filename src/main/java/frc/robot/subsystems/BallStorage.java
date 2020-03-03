@@ -90,7 +90,7 @@ public class BallStorage extends SubsystemBase {
   @Override
   public void periodic() {
     Shuffleboard.update();
-    //System.out.println(getBallCount() +" "+ obtainEncoderPosition());
+    //System.out.println(getBallCount() +" "+ getDistanceSensor());
     // This method will be called once per scheduler run
    }
 
@@ -112,8 +112,7 @@ public class BallStorage extends SubsystemBase {
 
   public void backTrack(){
     resetEncoder();
-    resetBallCounter();
-    bagMotorSetPosition(-2);
+    bagMotorSetPosition(-0.75);
   }
 
   public int getState(){
@@ -126,10 +125,8 @@ public class BallStorage extends SubsystemBase {
   }
 
   public void moveFifth(){
-    resetBallCounter();
     resetEncoder();
-    bagMotorSetPosition(IntakeConstants.kBALL_STORAGE_DISTANCE*position
-                       +IntakeConstants.kBALL_STORAGE_DISTANCE*0.1);
+    bagMotorSetPosition(IntakeConstants.kBALL_STORAGE_DISTANCE*0.3);
   }
 
   //useless
@@ -168,4 +165,9 @@ public class BallStorage extends SubsystemBase {
  * 
  * If you let a man go to sleep, he'll feel pretty refreshed in the morning,
  * but if you put a man to sleep, what morning? 
+ * 
+ * Every penny eaten is a penny saved!
+ * 
+ * Books > Education > Degree > Job > Money > Food. Why do all that
+ * when you could just eat the books?
  */

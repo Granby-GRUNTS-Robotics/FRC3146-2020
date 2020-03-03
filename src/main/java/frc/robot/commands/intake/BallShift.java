@@ -36,15 +36,16 @@ public class BallShift extends CommandBase {
     }else if( m_BallStorage.getBallCount() == 5){
       m_BallStorage.moveFifth();
       state ++;
-
+      m_BallStorage.addBallCounter();
     }else if (!m_BallStorage.hasBall()){
       state = 0;
       m_BallStorage.runMotor(0);
     }
-    if (m_BallStorage.obtainEncoderPosition() > 3*4096){
+    /*if (m_BallStorage.obtainEncoderPosition() > 4
+    *4096){
       m_BallStorage.resetEncoder();
       m_BallStorage.backTrack();
-    }
+    }//*/
 
     m_BallStorage.countBall();
   }
