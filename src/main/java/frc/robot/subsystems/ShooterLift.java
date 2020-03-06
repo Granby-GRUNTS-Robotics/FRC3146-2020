@@ -7,8 +7,11 @@
 
 package frc.robot.subsystems;
 
+import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants.ShooterConstants;
+
 import static frc.robot.Constants.PneumaticConstants;
 import static frc.robot.Constants.ShooterConstants.kSON;
 import static frc.robot.Constants.ShooterConstants.kSOFF;
@@ -21,6 +24,7 @@ public class ShooterLift extends SubsystemBase {
   private final Solenoid topSolenoid = new Solenoid(PneumaticConstants.kPCM_Port, PneumaticConstants.kTOP_SHOOTER_LIFT_PORT);
   private final Solenoid bottomSolenoid = new Solenoid(PneumaticConstants.kPCM_Port, PneumaticConstants.kBOTTOM_SHOOTER_LIFT_PORT);
 
+  //private static final Servo cameraServo = new Servo(8);
 
 
   public ShooterLift() {
@@ -37,22 +41,22 @@ public class ShooterLift extends SubsystemBase {
       case 0:
         topSolenoid.set(kSOFF);
         bottomSolenoid.set(kSOFF);
-        System.out.println(0);
+        //setServo(ShooterConstants.kZERO_SERVO_POS);
         break;
       case 1:
         topSolenoid.set(kSOFF);
         bottomSolenoid.set(kSON);
-        System.out.println(1);
+        //setServo(ShooterConstants.kONE_SERVO_POS);
         break;
       case 2:
         topSolenoid.set(kSON);
         bottomSolenoid.set(kSOFF);
-        System.out.println(2);
+        //setServo(ShooterConstants.kTWO_SERVO_POS);
         break;
       case 3:
         topSolenoid.set(kSON);
         bottomSolenoid.set(kSON);
-        System.out.println(3);
+        //setServo(ShooterConstants.kTHREE_SERVO_POS);
         break;
       default:
       topSolenoid.set(kSOFF);
@@ -61,8 +65,13 @@ public class ShooterLift extends SubsystemBase {
     }
   }
 
+  /*public void setServo(double degrees){
+    cameraServo.set(degrees);
+  }*/
+
   @Override
   public void periodic() {
+    //System.out.println(cameraServo.get());
     // This method will be called once per scheduler run
   }
 }
