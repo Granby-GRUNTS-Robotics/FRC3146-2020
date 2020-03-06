@@ -29,8 +29,6 @@ public class Shooter extends SubsystemBase {
    * different speeds
    */
 
-  private static final Servo cameraServo = new Servo(8);
-
   private static final Solenoid ballStop = new Solenoid(PneumaticConstants.kPCM_Port, PneumaticConstants.kSHOOTER_STOP_PORT);
 
   private final static CANSparkMax leftShooterMotor = new CANSparkMax(ShooterConstants.kLEFT_SHOOTER_MOTOR_PORT,
@@ -76,10 +74,6 @@ public class Shooter extends SubsystemBase {
 
   public void setSetpoint(double setpoint){
     shooterController.setReference(setpoint, ControlType.kVelocity, 0);
-  }
-
-  public void setServo(double degrees){
-    cameraServo.set(degrees);
   }
 
   public double getSpeed(){
