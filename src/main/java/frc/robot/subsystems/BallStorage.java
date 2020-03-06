@@ -90,7 +90,7 @@ public class BallStorage extends SubsystemBase {
   @Override
   public void periodic() {
     Shuffleboard.update();
-    //System.out.println(getBallCount() +" "+ getDistanceSensor());
+    System.out.println(getBallCount() +" "+ getDistanceSensor());
     // This method will be called once per scheduler run
    }
 
@@ -131,7 +131,7 @@ public class BallStorage extends SubsystemBase {
 
   //useless
   public boolean isShifted(){
-    return Math.abs(position*4096 - obtainEncoderPosition())<60;
+    return Math.abs(position*4096 - obtainEncoderPosition())<70;
   }
 
   //good override function
