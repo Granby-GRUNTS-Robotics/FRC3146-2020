@@ -84,6 +84,13 @@ public class DriveTrain extends SubsystemBase {
 
   //better methods than calling them directly
 
+  public void reset(){
+    leftDriveEncoder.setPosition(0.0);
+    leftSlaveEncoder.setPosition(0.0);
+    rightDriveEncoder.setPosition(0.0);
+    rightSlaveEncoder.setPosition(0.0);
+  }
+
   public double getLeftEncoderPosition(){
     return leftDriveEncoder.getPosition();
   }
